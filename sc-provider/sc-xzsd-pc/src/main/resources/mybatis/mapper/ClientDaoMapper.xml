@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.pc.client.dao.ClientDao">
+
+    <!--查询客户列表（分页）-->
+    <select id="listClientsByPage" parameterType="com.xzsd.pc.client.entity.ClientInfo" resultType="com.xzsd.pc.client.entity.ClientInfo">
+        select
+        u.user_acct userAcct,
+        u.user_name userName,
+        u.sex sex,
+        u.phone phone,
+        u.mail mail,
+        u.idcard idCard
+        from t_info_client c
+        left join t_sys_user u on c.user_id = u.user_id and u.is_delete = 0
+        where c.is_delete = 0
+        <if test="userName != null and userName != ''">
+            and u.user_name like concat('%', #{userName}, '%')
+        </if>
+        <if test="userAcct != null and userAcct != ''">
+            and u.user_acct like concat('%', #{userAcct}, '%')
+        </if>
+        <if test="role != null and role != ''">
+            and u.role_id like concat('%', #{role}, '%')
+        </if>
+    </select>
+
+</mapper>

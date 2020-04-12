@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.pc.slideshow.dao.SlideShowDao">
+
+    <!--新增首页轮播图-->
+    <insert id="addSlideshowHome" parameterType="com.xzsd.pc.slideshow.entity.SlideShowInfo">
+        insert into t_info_slideshow_home
+        (
+        slideshow_id,
+        slideshow_num,
+        image_path,
+        start_time,
+        end_time,
+        goods_id,
+        is_delete,
+        create_time,
+        create_user,
+        update_time,
+        update_user,
+        version
+        )
+        values
+        (
+        #{slideshowId},
+        #{slideshowNum},
+        #{imagePath},
+        #{startTime},
+        #{endTime},
+        #{goodsId},
+        #{isDelete},
+        now(),
+        #{createUser},
+        now(),
+        #{updateUser},
+        0
+        )
+      </insert>
+
+</mapper>
