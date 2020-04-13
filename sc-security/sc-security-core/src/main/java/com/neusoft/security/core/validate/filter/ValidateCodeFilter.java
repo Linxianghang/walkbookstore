@@ -85,7 +85,7 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
      *
      * @throws ServletException the servlet exception
      */
-    @Override
+/*    @Override
     public void afterPropertiesSet() throws ServletException {
 
         super.afterPropertiesSet();
@@ -94,7 +94,7 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
 //        addUrlToMap(securityProperties.getCode().getImage().getUrl(), ValidateCodeType.IMAGE);
 
 
-    }
+    }*/
 
     /**
      * 讲系统中配置的需要校验验证码的URL根据校验的类型放入map

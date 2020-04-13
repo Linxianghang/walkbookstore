@@ -132,7 +132,7 @@ public class GoodsService {
     }
 
     /**
-     * demo 查询商品列表（分页）
+     * 查询商品列表（分页）
      * @param goodsInfo
      * @return
      * @Author linxianghang

@@ -137,7 +137,7 @@ public class GoodsController {
      * @Date 2020-04-09
      */
     @RequestMapping(value = "listGoods")
-    public AppResponse listUsers(GoodsInfo goodsInfo) {
+    public AppResponse listGoods(GoodsInfo goodsInfo) {
         try {
             return goodsService.listGoods(goodsInfo);
         } catch (Exception e) {
