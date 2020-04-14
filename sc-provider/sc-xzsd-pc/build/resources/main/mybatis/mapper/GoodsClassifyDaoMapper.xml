@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.pc.goodsclassify.dao.GoodsClassifyDao">
+
+    <!--新增商品分类-->
+    <insert id="addGoodsClassify" parameterType="com.xzsd.pc.goodsclassify.entity.GoodsClassifyInfo">
+        insert into t_info_goods_classify
+        (
+        classify_id,
+        classify_name,
+        classify_comment,
+        classify_parent,
+        is_delete,
+        create_time,
+        create_user,
+        update_time,
+        update_user,
+        version
+        )
+        values
+        (
+        #{classifyId},
+        #{classifyName},
+        #{classifyComment},
+        #{classifyParent},
+        #{isDelete},
+        now(),
+        #{createUser},
+        now(),
+        #{updateUser},
+        0
+        )
+    </insert>
+
+    <!--查询商品分类详情-->
+    <select id="getGoodsClassify" parameterType="java.lang.String" resultType="com.xzsd.pc.goodsclassify.entity.GoodsClassifyInfo">
+        select
+        classify_name classifyName,
+        classify_comment classifyComment
+        from t_info_goods_classify
+        where classify_id = #{classifyId}
+        and is_delete = 0
+    </select>
+
+    <!--查询商品分类列表接口-->
+    <select id="listAllGoodsClassify" resultMap="GoodsClassify">
+        select
+        t1.classify_id fid,
+        t1.classify_name fname,
+        t1.version fversion,
+        t2.classify_id sid,
+        t2.classify_name sname,
+        t2.version sversion
+        from t_info_goods_classify t1
+        left join t_info_goods_classify t2 on t1.classify_id = t2.classify_parent
+        where t1.classify_parent = 0
+        and t1.is_delete = 0
+        and t2.is_delete = 0
+    </select>
+    <resultMap id="GoodsClassify" type="com.xzsd.pc.goodsclassify.entity.GoodsClassifyVO">
+        <id property="classifyId" column="fid" jdbcType="VARCHAR"/>
+        <result property="classifyName" column="fname" jdbcType="VARCHAR"/>
+        <result property="version" column="fversion" jdbcType="VARCHAR"/>
+        <collection property="twoClassifyList" ofType="com.xzsd.pc.goodsclassify.entity.SecondGoodsClassifyVO">
+            <result property="classifyId" column="sid" jdbcType="VARCHAR"/>
+            <result property="classifyName" column="sname" jdbcType="VARCHAR"/>
+            <result property="version" column="sversion" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
+
+    <!--修改商品分类-->
+    <update id="updateGoodsClassify" parameterType="com.xzsd.pc.goodsclassify.entity.GoodsClassifyInfo">
+        update t_info_goods_classify
+        set
+            classify_name = #{classifyName},
+            classify_comment = #{classifyComment},
+            update_user = #{updateUser},
+            update_time = now(),
+            version = version + 1
+        where classify_id = #{classifyId}
+        and version = #{version}
+    </update>
+
+    <!--删除商品分类-->
+    <update id="deleteGoodsClassify" parameterType="java.lang.String">
+        update t_info_goods_classify
+        set
+        is_delete = 1,
+        update_user = #{userId},
+        update_time = now(),
+        version = version + 1
+        where classify_id in
+        <foreach item="classifyId" collection="listcode" open="(" separator="," close=")">
+            #{classifyId}
+        </foreach>
+    </update>
+
+
+</mapper>

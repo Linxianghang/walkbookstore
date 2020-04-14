@@ -39,7 +39,7 @@ public class SlideShowController {
             AppResponse appResponse = slideShowService.addSlideshowHome(slideShowInfo);
             return appResponse;
         } catch (Exception e) {
-            logger.error("用户新增失败",e);
+            logger.error("首页轮播图新增失败",e);
             System.out.println(e.toString());
             throw e;
         }
@@ -82,7 +82,7 @@ public class SlideShowController {
             String updateUser = AuthUtils.getCurrentUserId();
             return slideShowService.deleteSlideshowHome(slideshowId,updateUser);
         } catch (Exception e) {
-            logger.error("用户删除错误", e);
+            logger.error("首页轮播图删除错误", e);
             System.out.println(e.toString());
             throw e;
         }
