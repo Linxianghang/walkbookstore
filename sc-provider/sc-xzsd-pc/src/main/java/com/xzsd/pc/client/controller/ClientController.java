@@ -32,7 +32,7 @@ public class ClientController {
         try {
             return clientService.listClients(clientInfo);
         } catch (Exception e) {
-            logger.error("查询用户列表异常", e);
+            logger.error("查询客户列表异常", e);
             System.out.println(e.toString());
             throw e;
         }

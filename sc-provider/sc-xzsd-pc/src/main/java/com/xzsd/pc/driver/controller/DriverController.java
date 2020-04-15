@@ -50,11 +50,11 @@ public class DriverController {
     }
 
     /**
-     * demo 查询用户详情
+     * demo 查询司机详情
      *
      * @param driverId
      * @return AppResponse
-     * @author dingning
+     * @author linxianghang
      * @Date 2020-03-21
      */
     @RequestMapping(value = "findDriverById")
@@ -62,14 +62,14 @@ public class DriverController {
         try {
             return driverService.findDriverById(driverId);
         } catch (Exception e) {
-            logger.error("用户查询错误", e);
+            logger.error("司机查询错误", e);
             System.out.println(e.toString());
             throw e;
         }
     }
 
     /**
-     * demo 修改用户
+     * 修改司机信息
      *
      * @param driverInfo
      * @return AppResponse
@@ -85,14 +85,14 @@ public class DriverController {
             driverInfo.setLastModifiedBy(userId);
             return driverService.updateDriver(driverInfo);
         } catch (Exception e) {
-            logger.error("修改用户信息错误", e);
+            logger.error("修改司机信息错误", e);
             System.out.println(e.toString());
             throw e;
         }
     }
 
     /**
-     * demo 司机列表(分页)
+     * 司机列表(分页)
      *
      * @param driverInfo
      * @return AppResponse
@@ -104,14 +104,14 @@ public class DriverController {
         try {
             return driverService.listDrivers(driverInfo);
         } catch (Exception e) {
-            logger.error("查询用户列表异常", e);
+            logger.error("查询司机列表异常", e);
             System.out.println(e.toString());
             throw e;
         }
     }
 
     /**
-     * demo 删除司机
+     * 删除司机
      *
      * @param userCode
      * @return AppResponse
@@ -125,7 +125,7 @@ public class DriverController {
             String userId = AuthUtils.getCurrentUserId();
             return driverService.deleteDriver(userCode, userId);
         } catch (Exception e) {
-            logger.error("用户删除错误", e);
+            logger.error("司机删除错误", e);
             System.out.println(e.toString());
             throw e;
         }

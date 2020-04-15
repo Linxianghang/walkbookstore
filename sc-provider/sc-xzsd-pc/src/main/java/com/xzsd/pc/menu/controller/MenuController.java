@@ -63,7 +63,7 @@ public class MenuController {
         try{
             return menuService.getMenu(menuId);
         } catch (Exception e){
-            logger.error("查询用户失败",e);
+            logger.error("查询菜单失败",e);
             System.out.println(e.toString());
             throw e;
         }
@@ -106,7 +106,7 @@ public class MenuController {
             String updateUser = AuthUtils.getCurrentUserId();
             return menuService.deleteMenu(menuId,updateUser);
         } catch (Exception e) {
-            logger.error("用户删除错误", e);
+            logger.error("菜单删除错误", e);
             System.out.println(e.toString());
             throw e;
         }
@@ -125,7 +125,7 @@ public class MenuController {
         try {
             return menuService.listMenus();
         } catch (Exception e) {
-            logger.error("查询用户列表异常", e);
+            logger.error("查询菜单列表异常", e);
             System.out.println(e.toString());
             throw e;
         }

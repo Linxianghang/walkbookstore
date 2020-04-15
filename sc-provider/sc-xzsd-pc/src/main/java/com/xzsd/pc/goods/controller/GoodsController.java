@@ -38,7 +38,7 @@ public class GoodsController {
             AppResponse appResponse = goodsService.addGoods(goodsInfo);
             return appResponse;
         } catch (Exception e) {
-            logger.error("用户新增失败",e);
+            logger.error("商品新增失败",e);
             System.out.println(e.toString());
             throw e;
         }
@@ -53,7 +53,7 @@ public class GoodsController {
      * @Date 2020-04-11
      */
     @PostMapping("getGoods")
-    public AppResponse getUser(String goodsId){
+    public AppResponse getGoods(String goodsId){
         try{
             return goodsService.getGoods(goodsId);
         } catch (Exception e){
@@ -72,14 +72,14 @@ public class GoodsController {
      * @Date 2020-04-11
      */
     @PostMapping("updateGoods")
-    public AppResponse updateUser(GoodsInfo goodsInfo) {
+    public AppResponse updateGoods(GoodsInfo goodsInfo) {
         try {
             //获取用户id
             String userId = AuthUtils.getCurrentUserId();
             goodsInfo.setUpdateUser(userId);
             return goodsService.updateGoods(goodsInfo);
         } catch (Exception e) {
-            logger.error("修改用户信息错误", e);
+            logger.error("修改商品信息错误", e);
             System.out.println(e.toString());
             throw e;
         }
@@ -101,7 +101,7 @@ public class GoodsController {
             goodsInfo.setUpdateUser(userId);
             return goodsService.updateGoodsShelfState(goodsInfo);
         } catch (Exception e) {
-            logger.error("修改用户信息错误", e);
+            logger.error("修改商品状态错误", e);
             System.out.println(e.toString());
             throw e;
         }
@@ -141,7 +141,7 @@ public class GoodsController {
         try {
             return goodsService.listGoods(goodsInfo);
         } catch (Exception e) {
-            logger.error("查询用户列表异常", e);
+            logger.error("查询商品列表异常", e);
             System.out.println(e.toString());
             throw e;
         }
