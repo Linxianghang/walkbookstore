@@ -1,6 +1,7 @@
 package com.xzsd.pc.order.dao;
 
 import com.xzsd.pc.order.entity.OrderInfo;
+import com.xzsd.pc.order.entity.OrderSearchVO;
 import com.xzsd.pc.order.entity.OrderVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -28,4 +29,11 @@ public interface OrderDao {
      * @return
      */
     int updateOrderState(OrderInfo orderInfo);
+
+    /**
+     * 分页查询订单
+     * @param orderInfo
+     * @return
+     */
+    List<OrderSearchVO> listOrdersByPage(OrderInfo orderInfo);
 }

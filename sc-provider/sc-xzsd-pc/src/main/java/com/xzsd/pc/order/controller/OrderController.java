@@ -68,4 +68,23 @@ public class OrderController {
             throw e;
         }
     }
+
+    /**
+     *  分页查询订单
+     *
+     * @param orderInfo
+     * @return AppResponse
+     * @author linxianghang
+     * @Date 2020-04-09
+     */
+    @RequestMapping(value = "listOrders")
+    public AppResponse listOrders(OrderInfo orderInfo) {
+        try {
+            return orderService.listOrders(orderInfo);
+        } catch (Exception e) {
+            logger.error("查询订单列表异常", e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
 }

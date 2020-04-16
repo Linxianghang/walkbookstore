@@ -33,4 +33,43 @@
         and version = #{version}
     </update>
 
+    <!--分页查询订单接口-->
+    <select id="listOrdersByPage" parameterType="com.xzsd.pc.order.entity.OrderInfo"
+            resultType="com.xzsd.pc.order.entity.OrderSearchVO">
+        select
+        t1.order_id orderId,
+        t1.order_all_cost orderAllCost,
+        t1.order_state_id orderStateId,
+        t1.store_id storeId,
+        t2.user_name userName,
+        t2.phone phone,
+        t1.pay_time payTime,
+        t1.version version
+        from t_info_order t1, t_sys_user t2
+        where t1.client_id = t2.user_id
+        and t1.is_delete = 0
+        <if test="userName != null and userName != ''">
+            and t2.user_name like concat('%', #{userName}, '%')
+        </if>
+        <if test="orderId != null and orderId != ''">
+            and t1.order_id like concat('%', #{orderId}, '%')
+        </if>
+        <if test="payTimeStart != null and payTimeStart != '' and payTimeEnd == null">
+            and t1.pay_time &gt;= #{payTimeStart}
+        </if>
+        <if test="payTimeStart == null and payTimeEnd != null and payTimeEnd != ''">
+            and t1.pay_time &lt;= #{payTimeEnd}
+        </if>
+        <if test="payTimeStart != null and payTimeStart != '' and payTimeEnd != null and payTimeEnd != ''">
+            and t1.pay_time between #{payTimeStart} and #{payTimeEnd}
+        </if>
+        <if test="phone != null and phone != ''">
+            and t2.phone like concat('%', #{phone}, '%')
+        </if>
+        <if test="orderStateId != null and orderStateId != ''">
+            and t1.order_status_id = #{orderStateId}
+        </if>
+        order by t1.create_time desc
+    </select>
+
 </mapper>

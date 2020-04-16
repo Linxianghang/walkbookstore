@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.neusoft.core.restful.AppResponse;
 import com.xzsd.pc.order.dao.OrderDao;
 import com.xzsd.pc.order.entity.OrderInfo;
+import com.xzsd.pc.order.entity.OrderSearchVO;
 import com.xzsd.pc.order.entity.OrderVO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,5 +58,21 @@ public class OrderService {
             return appResponse;
         }
         return appResponse;
+    }
+
+    /**
+     * demo 分页查询订单
+     * @param
+     * @return
+     * @Author linxianghang
+     * @Date 2020-04-09
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public AppResponse listOrders(OrderInfo orderInfo) {
+        PageHelper.startPage(orderInfo.getPageNum(), orderInfo.getPageSize());
+        List<OrderSearchVO> orderSearchVOList = orderDao.listOrdersByPage(orderInfo);
+        // 包装Page对象
+        PageInfo<OrderSearchVO> pageData = new PageInfo<OrderSearchVO>(orderSearchVOList);
+        return AppResponse.success("查询成功！",pageData);
     }
 }
