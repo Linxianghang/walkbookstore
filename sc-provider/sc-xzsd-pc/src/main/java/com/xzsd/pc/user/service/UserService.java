@@ -6,6 +6,7 @@ import com.neusoft.core.restful.AppResponse;
 import com.neusoft.util.StringUtil;
 import com.xzsd.pc.user.dao.UserDao;
 import com.xzsd.pc.user.entity.UserInfo;
+import com.xzsd.pc.util.PasswordUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +42,10 @@ public class UserService {
         }
         userInfo.setUserId(StringUtil.getCommonCode(2));
         userInfo.setIsDelete(0);
+        //密码加密
+        String oldpwd = userInfo.getUserPassword();
+        String pwd = PasswordUtil.generatePassword(oldpwd);
+        userInfo.setUserPassword(pwd);
         // 新增用户
         int count = userDao.addUser(userInfo);
         if(0 == count) {
