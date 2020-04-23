@@ -2,6 +2,7 @@ package com.xzsd.pc.menu.dao;
 
 
 import com.xzsd.pc.menu.entity.MenuInfo;
+import com.xzsd.pc.menu.entity.MenuList;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -46,7 +47,13 @@ public interface MenuDao {
      * 查询菜单列表
      * @return
      */
-    List<MenuInfo> listMenus();
+    List<MenuInfo> listMenu();
+
+    /**
+     * 根据角色查询首页菜单列表接口
+     * @return
+     */
+    List<MenuInfo> listMenuHome(@Param("role") String role);
 
 
 }

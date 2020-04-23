@@ -19,7 +19,7 @@ import javax.annotation.Resource;
  * @date 2020-04-17
  */
 @RestController
-@RequestMapping("store")
+@RequestMapping("/store")
 public class StoreController {
     private static final Logger logger = LoggerFactory.getLogger(StoreController.class);
 

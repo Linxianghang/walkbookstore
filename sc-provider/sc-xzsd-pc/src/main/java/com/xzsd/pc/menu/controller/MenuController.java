@@ -20,7 +20,7 @@ import javax.annotation.Resource;
  * @date 2020-04-09
  */
 @RestController
-@RequestMapping("menu")
+@RequestMapping("/menu")
 public class MenuController {
     private static final Logger logger = LoggerFactory.getLogger(MenuController.class);
 
@@ -120,12 +120,30 @@ public class MenuController {
      * @author linxianghang
      * @Date 2020-04-10
      */
-    @RequestMapping(value = "listMenus")
-    public AppResponse listMenus() {
+    @RequestMapping(value = "listMenu")
+    public AppResponse listMenu() {
         try {
-            return menuService.listMenus();
+            return menuService.listMenu();
         } catch (Exception e) {
             logger.error("查询菜单列表异常", e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
+
+    /**
+     * 根据角色查询菜单
+     * @param role
+     * @return
+     * @author linxianghang
+     * @date 2020-4-22
+     */
+    @PostMapping("listMenuHome")
+    public AppResponse listMenuHome(String role){
+        try {
+            return menuService.listMenuHome(role);
+        }catch (Exception e){
+            logger.error("根据角色查询菜单失败");
             System.out.println(e.toString());
             throw e;
         }

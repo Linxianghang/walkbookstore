@@ -5,6 +5,7 @@ import com.neusoft.core.restful.AppResponse;
 import com.neusoft.util.StringUtil;
 import com.xzsd.pc.menu.dao.MenuDao;
 import com.xzsd.pc.menu.entity.MenuInfo;
+import com.xzsd.pc.menu.entity.MenuList;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -99,17 +100,42 @@ public class MenuService {
     }
 
     /**
-     * demo 查询菜单
-     * @param
+     * 查询菜单列表
+     *
      * @return
      * @Author linxianghang
-     * @Date 2020-04-10
+     * @Date 2020-4-23
      */
-    @Transactional(rollbackFor = Exception.class)
-    public AppResponse listMenus() {
-        List<MenuInfo> menuInfo = menuDao.listMenus();
-        return AppResponse.success("查询成功！",menuInfo);
+    public AppResponse listMenu(){
+        List<MenuInfo> menuInfoList = menuDao.listMenu();
+        if(menuInfoList.size() == 0){
+            return AppResponse.versionError("查询菜单列表失败！");
+        }
+        //封装成接口文档对应的list名称
+        MenuList menuList = new MenuList();
+        menuList.setMenuList(menuInfoList);
+        return AppResponse.success("查询菜单列表成功！", menuList);
     }
+
+
+    /**
+     * 根据角色查询菜单
+     * @param role
+     * @return
+     * @Author linxianghang
+     * @Date 2020-4-22
+     */
+    public AppResponse listMenuHome(String role){
+        List<MenuInfo> menuInfoList = menuDao.listMenuHome(role);
+        if(menuInfoList.size() == 0){
+            return AppResponse.versionError("根据角色查询菜单失败");
+        }
+        //封装数据
+        MenuList menuList = new MenuList();
+        menuList.setMenuList(menuInfoList);
+        return AppResponse.success("根据角色查询菜单成功", menuList);
+    }
+
 
 
 }

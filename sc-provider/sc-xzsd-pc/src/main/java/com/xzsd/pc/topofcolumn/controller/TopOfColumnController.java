@@ -17,7 +17,7 @@ import javax.annotation.Resource;
  * @date 2020-04-19
  */
 @RestController
-@RequestMapping("topOfColumn")
+@RequestMapping("/topOfColumn")
 public class TopOfColumnController {
 
 

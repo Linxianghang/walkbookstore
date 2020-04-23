@@ -19,7 +19,7 @@ import java.util.List;
  * @date 2020-04-20
  */
 @RestController
-@RequestMapping("imageUpload")
+@RequestMapping("/imageUpload")
 public class ImageUploadController {
 
     private static final Logger logger = LoggerFactory.getLogger(ImageUploadController.class);
