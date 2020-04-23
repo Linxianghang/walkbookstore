@@ -8,7 +8,7 @@
         (
         slideshow_id,
         slideshow_num,
-        image_path,
+        slideshow_path,
         start_time,
         end_time,
         goods_id,

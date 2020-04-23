@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.app.userinformation.dao.UserInformationDao">
+
+    <!--查询登录用户角色-->
+    <select id="getUserRole" parameterType="java.lang.String" resultType="java.lang.String">
+        select
+        role_id as role
+        from t_sys_user
+        where user_id = #{userId}
+    </select>
+
+    <!--获取客户的邀请码-->
+    <select id="getUserInviteCode" parameterType="java.lang.String" resultType="java.lang.String">
+        select
+        invitation_code as inviteCode
+        from t_sys_customer
+        where customer_id = #{userId}
+    </select>
+
+    <!--查询店长个人信息-->
+    <select id="getStoreInfo" parameterType="java.lang.String"
+            resultType="com.xzsd.app.userinformation.entity.UserInfo">
+        select
+        t1.user_name as userName,
+        t1.image_path as userImage,
+        t1.role_id as role,
+        t3.area_name as provinceName,
+        t4.area_name as cityName,
+        t5.area_name as areaName,
+        t2.address as address,
+        t1.version as version,
+        t6.store_id as storeId,
+        t6.invite_code as inviteCode,
+        t6.store_name as storeName
+        from t_sys_user t1
+        left join t_info_store t2 on t1.user_id = t2.user_id
+        left join t_info_area_level t3 on t2.province_id = t3.area_id
+        left join t_info_area_level t4 on t2.city_id = t4.area_id
+        left join t_info_area_level t5 on t2.area_id = t5.area_id
+        left join t_info_store t6 on t1.user_id = t6.user_id
+        where t1.user_id = #{userId}
+        and t1.is_delete = 0
+    </select>
+
+    <!--查询司机个人信息-->
+    <select id="getDriverInfo" parameterType="java.lang.String"
+            resultType="com.xzsd.app.userinformation.entity.UserInfo">
+        select
+        user_name as userName,
+        user_name as driverName,
+        image_path as userImage,
+        role_id as role,
+        phone as phone,
+        version as version
+        from t_sys_user
+        where user_id = #{userId}
+        and is_delete = 0
+    </select>
+
+    <!--查询客户个人信息-->
+    <select id="getCustomerInfo" parameterType="java.lang.String"
+            resultType="com.xzsd.app.userinformation.entity.UserInfo">
+        select
+        t1.user_name as userName,
+        t1.image_path as userImage,
+        t1.role_id as role,
+        <if test="inviteCode != null and inviteCode != ''">
+            t3.store_name as storeName,
+            t3.store_id as storeId,
+        </if>
+        t1.version as version
+        from
+        <if test="inviteCode != null and inviteCode != ''">
+            t_sys_customer t2,
+            t_info_store t3,
+        </if>
+        t_sys_user t1
+        where t1.user_id = #{userId}
+        <if test="inviteCode != null and inviteCode != ''">
+            and t1.user_id = t2.customer_id
+            and t2.invitation_code = t3.invitation_code
+        </if>
+        and t1.is_delete = 0
+    </select>
+
+    <!--修改用户密码-->
+    <update id="updateUserPassword" parameterType="com.xzsd.app.userinformation.entity.UserInfo">
+        update t_sys_user
+        set
+        user_password = #{userNewPassword},
+        version = version + 1,
+        update_time = now(),
+        update_user = #{userId}
+        where user_id = #{userId}
+        <if test="role == 2 or role == 3">
+            and version = #{version}
+        </if>
+
+    </update>
+
+    <!--获取登录用户的密码-->
+    <select id="getUserPasswordById" parameterType="java.lang.String"
+            resultType="java.lang.String">
+        select
+        user_password as userPassword
+        from t_sys_user
+        where user_id = #{userId}
+    </select>
+
+</mapper>
