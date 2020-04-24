@@ -85,7 +85,7 @@
         menu_id menuId,
         menu_name menuName,
         version
-        from    t_sys_menu
+        from t_sys_menu
         where is_delete = 0
     </select>
 
