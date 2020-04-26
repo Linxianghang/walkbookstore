@@ -48,8 +48,8 @@ public class ClientGoodsController {
      * 查询商品评价
      * @param goodsEvaluationInfo
      * @return
-     * @author zhaorujie
-     * @date 2020/4/12
+     * @author linxianghang
+     * @date 2020-04-23
      */
     @PostMapping("listGoodsEvaluates")
     public AppResponse listGoodsEvaluates(GoodsEvaluationInfo goodsEvaluationInfo){
@@ -65,8 +65,8 @@ public class ClientGoodsController {
     /**
      * 查询商品一级分类
      * @return
-     * @author zhaorujie
-     * @date 2020/4/12
+     * @author linxianghang
+     * @date 2020-04-23
      */
     @PostMapping("listOneGoodsClassify")
     public AppResponse listOneGoodsClassify(){
@@ -83,8 +83,8 @@ public class ClientGoodsController {
      * 查询商品二级分类及商品
      * @param classifyId
      * @return
-     * @author zhaorujie
-     * @date 2020/4/12
+     * @author linxianghang
+     * @date 2020-04-23
      */
     @PostMapping("listGetClassGoods")
     public AppResponse listGetClassGoods(String classifyId){

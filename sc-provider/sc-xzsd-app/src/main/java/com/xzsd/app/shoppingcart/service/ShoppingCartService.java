@@ -68,6 +68,8 @@ public class ShoppingCartService {
      * 修改购物车
      * @param shoppingCartInfo
      * @return
+     * @author linxianghang
+     * @data 2020-04-24
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse updateShoppingCart(ShoppingCartInfo shoppingCartInfo) {

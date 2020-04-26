@@ -29,7 +29,7 @@ public class RegisterController {
      * @param registerInfo
      * @return
      * @author linxianghang
-     * @date 2020/4/22
+     * @date 2020-04-22
      */
     @PostMapping("clientRegister")
     public AppResponse registerUser(RegisterInfo registerInfo){
