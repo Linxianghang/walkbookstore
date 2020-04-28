@@ -1,9 +1,90 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.xzsd.app.clientorder.dao.ClientOrderDao">
+<mapper namespace="com.xzsd.app.managerorder.dao.ManagerOrderDao">
 
-    <!--新增订单-->
-    <insert id="addOrder" parameterType=""
+    <!--新增客户订单的订单信息-->
+    <insert id="addOrder" parameterType="com.xzsd.app.clientorder.entity.ClientOrderInfo">
+        insert into t_info_order
+        (
+            order_id,
+            user_id,
+            order_all_cost,
+            total_count,
+            order_state_id,
+            pay_status,
+            store_id,
+            pay_time,
+            is_delete,
+            create_time,
+            create_user,
+            update_time,
+            version
+        )
+        values
+        (
+            #{orderId},
+            #{userId},
+            #{orderAllCost},
+            #{orderAllGoodsCount},
+            0,
+            0,
+            #{storeId},
+            now(),
+            0,
+            now(),
+            #{userId},
+            now(),
+            0
+        )
+    </insert>
+
+    <!--查询新增订单中的商品库存数量和商品的销售量-->
+    <select id="getListGoodsInventory" parameterType="java.lang.String"
+            resultType="com.xzsd.app.clientorder.entity.GoodsInfo">
+        select
+        goods_id goodsId,
+        goods_name goodsName,
+        goods_inventory goodsInventory,
+        goods_status goodsStatus,
+        goods_sales goodsSales
+        from t_info_goods
+        where goods_id in
+        <foreach item="goodsId" index="index" collection="listGoodsId" open="(" separator="," close=")">
+            #{goodsId}
+        </foreach>
+    </select>
+
+    <!--删除购物车-->
+    <update id="deleteShoppingCard" parameterType="java.lang.String">
+        update t_info_shopping_cart
+        set
+        is_delete = 1,
+        update_time = now(),
+        update_user = #{userId},
+        version = version + 1
+        where shop_cart_id in
+        <foreach item="item" index="index"  collection="shopCartIdList" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <!--更新商品的库存数量-->
+    <update id="updateGoodsInventory" parameterType="java.util.List">
+        <foreach item="item" index="index" collection="goodsInfoList" open="" separator=";" close="">
+            update t_goods_info
+            set
+            goods_inventory = #{item.goodsInventory, jdbcType=INTEGER},
+            goods_sales = #{item.sales, jdbcType=INTEGER},
+            update_time = now(),
+            <if test="item.goodsStatus != null and item.goodsStatus != ''">
+                goods_state_id = #{item.goodsStatus, jdbcType=VARCHAR},
+            </if>
+            version = version + 1
+            <where>
+                goods_id = #{item.goodsId, jdbcType=VARCHAR}
+            </where>
+        </foreach>
+    </update>
 
 
 </mapper>

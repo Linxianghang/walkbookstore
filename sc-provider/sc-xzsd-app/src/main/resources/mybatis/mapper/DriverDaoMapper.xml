@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.app.driver.dao.DriverDao">
+
+    <!--查询司机负责的门店信息接口-->
+    <select id="listDriverStores" parameterType="com.xzsd.app.driver.entity.DriverInfo"
+            resultType="com.xzsd.app.driver.entity.DriverInfo">
+        select
+        t2.store_id as storeId,
+        t2.store_name as storeName,
+        t2.address as address,
+        t4.area_name as provinceName,
+        t5.area_name as cityName,
+        t6.area_name as areaName,
+        t3.user_name as userName,
+        t3.phone as phone
+        from t_info_driver t1, t_info_store t2,
+        t_sys_user t3, t_info_area_level t4,
+        t_info_area_level t5, t_info_area_level t6
+        where t1.driver_id = #{userId}
+        and t2.user_id = t3.user_id
+        and t2.province_id = t4.area_id
+        and t2.city_id = t5.area_id
+        and t2.area_id = t6.area_id
+        and t1.is_delete = 0
+        and t2.is_delete = 0
+        and t3.is_delete = 0
+        <if test="keyword != null and keyword != ''">
+            and (t2.id like concat('%', #{keyword}, '%')
+            or t3.user_name like concat('%', #{keyword}, '%'))
+        </if>
+    </select>
+</mapper>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.app.managerorder.dao.ManagerOrderDao">
+
+    <!--查询店长订单列表-->
+    <select id="listManagerOrders" parameterType="com.xzsd.app.managerorder.entity.ManagerOrder"
+            resultType="com.xzsd.app.managerorder.entity.ManagerOrderVO">
+        select
+        distinct
+        t2.order_id as orderId,
+        t2.order_state_id as orderStateId,
+        t6.user_name as userName,
+        t6.phone as phone,
+        t2.order_all_cost as orderAllCost,
+        t2.total_count as orderAllGoodsCount,
+        t2.version as version,
+        t5.customer_id as userId
+        from t_info_store t1, t_info_order t2,
+        t_info_order_deepen t3, t_info_goods t4,
+        t_sys_customer t5, t_sys_user t6
+        where t1.user_id = #{userId}
+        and t1.store_id = t2.store_id
+        and t2.order_id = t3.order_id
+        and t3.goods_id = t4.goods_id
+        and t1.invite_code = t5.invitation_code
+        and t5.customer_id = t6.user_id
+        and t2.user_id = t6.user_id
+        and t2.is_delete = 0
+        and t3.is_delete = 0
+        <if test="orderStateId == 0">
+            and t2.order_status_id = '0'
+        </if>
+        <if test="orderStateId == 2">
+            and t2.order_status_id = '2'
+        </if>
+        <if test="orderStateId == 4">
+            and t2.order_status_id in(4,5)
+        </if>
+        <if test="keyword != null and keyword != ''">
+            and (t4.goods_name like concat('%', #{keyword}, '%')
+            or t1.id like concat('%', #{keyword}, '%'))
+        </if>
+        order by t2.create_time desc
+    </select>
+
+    <!--查询店长订单下的商品-->
+    <select id="getListOrderGoods" parameterType="com.xzsd.app.managerorder.entity.ManagerOrder"
+            resultType="com.xzsd.app.managerorder.entity.GoodsInfo">
+        select
+        t2.order_id as orderId,
+        t4.goods_id as goodsId,
+        t4.goods_image_path as goodsImagePath,
+        t4.goods_name as goodsName,
+        t4.goods_price as goodsPrice,
+        t4.goods_describe as goodsDescribe,
+        t3.goods_count as cartGoodsCount
+        from t_info_store t1
+        left join t_info_order t2 on t1.store_id = t2.store_id and t2.is_delete = 0
+        left join t_info_order_deepen t3 on t2.order_id = t3.order_id and t3.is_delete = 0
+        left join t_info_goods t4 on t3.goods_id = t4.goods_id
+        where t1.user_id = #{userId}
+        order by t3.create_time desc
+    </select>
+
+    <!--更新订单状态-->
+    <update id="updateManagerOrderState" parameterType="com.xzsd.app.managerorder.entity.ManagerOrder">
+        update t_info_order
+        set
+            order_state_id = #{orderStateId},
+            update_user = #{userId},
+            update_time = now(),
+            version = version + 1
+        where order_id = #{orderId}
+        and version = #{version}
+    </update>
+
+    <!--查询订单详情映射-->
+    <resultMap id="orderDetailsById" type="com.xzsd.app.managerorder.entity.ManagerOrderVO">
+        <id column="orderId" property="orderId"/>
+        <result column="orderStateId" property="orderStateId"/>
+        <result column="orderAllGoodsCount" property="orderAllGoodsCount"/>
+        <result column="orderAllCost" property="orderAllCost"/>
+        <result column="crateTime" property="crateTime"/>
+        <result column="storeName" property="storeName"/>
+        <result column="userName" property="userName"/>
+        <result column="phone" property="phone"/>
+        <result column="address" property="address"/>
+        <result column="provinceName" property="provinceName"/>
+        <result column="cityName" property="cityName"/>
+        <result column="areaName" property="areaName"/>
+        <collection property="goodsList" ofType="com.xzsd.app.managerorder.entity.GoodsInfo">
+            <id column="goodsId" property="goodsId"/>
+            <result column="goodsName" property="goodsName"/>
+            <result column="goodsPrice" property="goodsPrice"/>
+            <result column="goodsImagePath" property="goodsImagePath"/>
+            <result column="cartGoodsCount" property="cartGoodsCount"/>
+            <result column="goodsDescribe" property="goodsDescribe"/>
+        </collection>
+    </resultMap>
+
+    <!--查询订单详情-->
+    <select id="listManagerOrderDeepen" parameterType="java.lang.String"
+            resultMap="orderDetailsById">
+        select
+        t1.order_id as orderId,
+        t1.order_state_id as orderStateId,
+        t1.total_count as orderAllGoodsCount,
+        t1.order_all_cost as orderAllCost,
+        t1.create_time as crateTime,
+        t2.goods_count as cartGoodsCount,
+        t3.goods_id as goodsId,
+        t3.goods_name as goodsName,
+        t3.goods_price as goodsPrice,
+        t3.goods_image_path as goodsImagePath,
+        t3.goods_describe as goodsDescribe,
+        t4.store_name as storeName,
+        t4.address as address,
+        t5.area_name as provinceName,
+        t6.area_name as cityName,
+        t7.area_name as areaName,
+        t8.user_name as userName,
+        t8.phone as phone
+        from t_info_order t1
+        left join t_info_order_deepen t2 on t1.order_id = t2.order_id
+        left join t_info_goods t3 on t2.goods_id = t3.goods_id
+        left join t_info_store t4 on t1.store_id = t4.store_id
+        left join t_info_area_level t5 on t4.province_id = t5.area_id
+        left join t_info_area_level t6 on t4.city_id = t6.area_id
+        left join t_info_area_level t7 on t4.area_id = t7.area_id
+        left join t_sys_user t8 on t1.user_id = t8.user_id
+        where t1.order_id = #{orderId}
+        and t1.is_delete = 0
+        and t2.is_delete = 0
+    </select>
+</mapper>

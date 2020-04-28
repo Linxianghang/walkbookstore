@@ -6,6 +6,7 @@ import com.neusoft.core.restful.AppResponse;
 import com.neusoft.util.StringUtil;
 import com.xzsd.pc.driver.dao.DriverDao;
 import com.xzsd.pc.driver.entity.DriverInfo;
+import com.xzsd.pc.util.PasswordUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +42,10 @@ public class DriverService {
         }
         driverInfo.setDriverId(StringUtil.getCommonCode(2));
         driverInfo.setIsDeleted(0);
+        //密码加密
+        String oldpwd = driverInfo.getDriverPassword();
+        String pwd = PasswordUtil.generatePassword(oldpwd);
+        driverInfo.setDriverPassword(pwd);
         // 新增用户
         int count = driverDao.addDriver(driverInfo);
         int usercount = driverDao.addDriverToUser(driverInfo);

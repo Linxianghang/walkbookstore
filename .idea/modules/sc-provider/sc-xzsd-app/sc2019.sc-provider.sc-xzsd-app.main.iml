@@ -217,5 +217,6 @@
     <orderEntry type="library" name="Gradle: io.netty:netty-transport:4.0.27.Final" level="project" />
     <orderEntry type="library" name="Gradle: io.netty:netty-buffer:4.0.27.Final" level="project" />
     <orderEntry type="library" name="Gradle: io.netty:netty-common:4.0.27.Final" level="project" />
+    <orderEntry type="library" name="Gradle: com.sun.jersey:jersey-server:1.19.1" level="project" />
   </component>
 </module>
