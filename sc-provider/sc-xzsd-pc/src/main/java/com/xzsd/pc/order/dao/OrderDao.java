@@ -1,5 +1,6 @@
 package com.xzsd.pc.order.dao;
 
+import com.xzsd.pc.order.entity.OrderDetails;
 import com.xzsd.pc.order.entity.OrderInfo;
 import com.xzsd.pc.order.entity.OrderSearchVO;
 import com.xzsd.pc.order.entity.OrderVO;
@@ -21,7 +22,7 @@ public interface OrderDao {
      * @param orderId
      * @return
      */
-    List<OrderVO> getListOrder(@Param("orderId") String orderId);
+    List<OrderDetails> getListOrder(@Param("orderId") String orderId);
 
     /**
      * 修改订单状态

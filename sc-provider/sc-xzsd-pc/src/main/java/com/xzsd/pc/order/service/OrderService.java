@@ -5,9 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.neusoft.core.restful.AppResponse;
 import com.xzsd.pc.order.dao.OrderDao;
-import com.xzsd.pc.order.entity.OrderInfo;
-import com.xzsd.pc.order.entity.OrderSearchVO;
-import com.xzsd.pc.order.entity.OrderVO;
+import com.xzsd.pc.order.entity.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,8 +29,14 @@ public class OrderService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse getListOrder(String orderId){
-        List<OrderVO> listOrder = orderDao.getListOrder(orderId);
-        return AppResponse.success("查询订单详情成功",listOrder);
+        List<OrderDetails> orderDetails = orderDao.getListOrder(orderId);
+        if(orderDetails.size() == 0){
+            return AppResponse.versionError("查询订单详情失败！");
+        }
+        //封装成接口文档需要的名称
+        OrderDetailsList orderDetailsList = new OrderDetailsList();
+        orderDetailsList.setOrderDeepenList(orderDetails);
+        return AppResponse.success("查询订单详情成功！", orderDetailsList);
     }
 
     /**

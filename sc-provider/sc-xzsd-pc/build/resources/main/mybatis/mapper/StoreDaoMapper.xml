@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.pc.store.dao.StoreDao">
+
+    <!--新增门店信息-->
+    <insert id="addStore" parameterType="com.xzsd.pc.store.entity.StoreInfo">
+        insert into t_info_store
+        (
+        store_id,
+        store_name,
+        phone,
+        user_id,
+        business_code,
+        province_id,
+        city_id,
+        area_id,
+        address,
+        is_delete,
+        create_time,
+        create_user,
+        update_time,
+        update_user,
+        version
+        )
+        values
+        (
+        #{storeId},
+        #{storeName},
+        #{phone},
+        #{userId},
+        #{businessCode},
+        #{provinceId},
+        #{cityId},
+        #{areaId},
+        #{address},
+        #{isDelete},
+        now(),
+        #{createUser},
+        now(),
+        #{updateUser},
+        0
+        )
+      </insert>
+
+    <!--查询门店详情-->
+    <select id="getStore" parameterType="java.lang.String" resultType="com.xzsd.pc.store.entity.StoreVO">
+        select
+        store_name storeName,
+        phone,
+        user_id userId,
+        business_code businessCode,
+        province_id provinceName,
+        city_id cityName,
+        area_id areaName,
+        address,
+        version
+        from t_info_store
+         where store_id = #{storeId}
+         and is_delete = 0
+    </select>
+
+
+    <!--修改商品-->
+    <update id="updateStore" parameterType="com.xzsd.pc.store.entity.StoreInfo">
+        update t_info_store
+        set
+        store_name = #{storeName},
+        phone = #{phone},
+        user_id = #{userId},
+        business_code = #{businessCode},
+        province_id = #{provinceId},
+        city_id = #{cityId},
+        area_id = #{areaId},
+        address = #{address},
+        update_time = now(),
+        update_user   = #{updateUser},
+        version = version + 1
+        where store_id = #{storeId}
+        and version = #{version}
+    </update>
+
+    <!--分页查询门店信息-->
+    <select id="listStoresByPage" parameterType="com.xzsd.pc.store.entity.StoreInfo" resultType="com.xzsd.pc.store.entity.StoreVO">
+        select
+        s.store_id storeId,
+        s.store_name storeName,
+        s.phone,
+        s.address,
+        u.user_name userName,
+        s.invite_code inviteCode,
+        u.user_acct userAcct,
+        s.version
+        from t_info_store s left join t_sys_user u on s.user_id = u.user_id
+        where s.is_delete = 0
+        and u.is_delete = 0
+        <if test="storeId != null and storeId != ''">
+        and s.store_id like concat('%', #{storeId}, '%')
+        </if>
+        <if test="storeName != null and storeName != ''">
+            and s.store_name like concat('%', #{storeName}, '%')
+        </if>
+        <if test="userName != null and userName != ''">
+            and u.user_name like concat('%', #{userName}, '%')
+        </if>
+        <if test="provinceId != null and provinceId != ''">
+            and s.province_id = #{provinceId}
+        </if>
+        <if test="cityId != null and cityId != ''">
+            and s.city_id = #{cityId}
+        </if>
+        <if test="areaId != null and areaId != ''">
+            and s.area_id = #{areaId}
+        </if>
+        order by s.create_time desc
+    </select>
+
+    <!--删除门店-->
+    <update id="deleteStore" parameterType="com.xzsd.pc.store.entity.StoreInfo">
+        update t_info_store
+        set
+        is_delete = 1,
+        update_time = now(),
+        update_user   = #{userId},
+        version = version + 1
+        where store_id in
+        <foreach item="storeId" collection="listcode" open="(" separator="," close=")">
+            #{storeId}
+        </foreach>
+    </update>
+
+
+</mapper>
