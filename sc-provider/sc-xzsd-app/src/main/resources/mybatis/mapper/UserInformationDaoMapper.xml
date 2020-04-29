@@ -79,7 +79,7 @@
         where t1.user_id = #{userId}
         <if test="inviteCode != null and inviteCode != ''">
             and t1.user_id = t2.customer_id
-            and t2.invitation_code = t3.invitation_code
+            and t2.invitation_code = t3.invite_code
         </if>
         and t1.is_delete = 0
     </select>
