@@ -17,6 +17,10 @@ public class GoodsClassifyVO {
      */
     private String classifyName;
     /**
+     * 等级
+     */
+    private int rank;
+    /**
      * 父级id
      */
     private String classifyParent;
@@ -31,7 +35,7 @@ public class GoodsClassifyVO {
     /**
      * 二级分类
      */
-    private List<SecondGoodsClassifyVO> twoClassifyList;
+    private List<GoodsClassifyVO> twoClassifyList;
 
     public String getClassifyId() {
         return classifyId;
@@ -47,6 +51,14 @@ public class GoodsClassifyVO {
 
     public void setClassifyName(String classifyName) {
         this.classifyName = classifyName;
+    }
+
+    public int getRank() {
+        return rank;
+    }
+
+    public void setRank(int rank) {
+        this.rank = rank;
     }
 
     public String getClassifyParent() {
@@ -73,11 +85,11 @@ public class GoodsClassifyVO {
         this.version = version;
     }
 
-    public List<SecondGoodsClassifyVO> getTwoClassifyList() {
+    public List<GoodsClassifyVO> getTwoClassifyList() {
         return twoClassifyList;
     }
 
-    public void setTwoClassifyList(List<SecondGoodsClassifyVO> twoClassifyList) {
+    public void setTwoClassifyList(List<GoodsClassifyVO> twoClassifyList) {
         this.twoClassifyList = twoClassifyList;
     }
 }

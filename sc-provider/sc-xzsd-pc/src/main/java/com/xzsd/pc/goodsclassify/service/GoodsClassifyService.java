@@ -4,10 +4,14 @@ import com.neusoft.core.restful.AppResponse;
 import com.neusoft.util.StringUtil;
 import com.xzsd.pc.goodsclassify.dao.GoodsClassifyDao;
 import com.xzsd.pc.goodsclassify.entity.GoodsClassifyInfo;
+import com.xzsd.pc.goodsclassify.entity.GoodsClassifyList;
+import com.xzsd.pc.goodsclassify.entity.GoodsClassifyVO;
+import com.xzsd.pc.goodsclassify.entity.SecondGoodsClassifyVO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,14 +34,8 @@ public class GoodsClassifyService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse addGoodsClassify(GoodsClassifyInfo goodsClassifyInfo){
-        // 校验账号是否存在
-        /*int countUserAcct = userDao.countUserAcct(userInfo);
-        if(0 != countUserAcct) {
-            return AppResponse.bizError("用户账号已存在，请重新输入！");
-        }*/
         goodsClassifyInfo.setClassifyId(StringUtil.getCommonCode(2));
-        goodsClassifyInfo.setIsDelete(0);
-        // 新增用户
+        // 新增分类
         int count = goodsClassifyDao.addGoodsClassify(goodsClassifyInfo);
         if(0 == count) {
             return AppResponse.bizError("新增失败，请重试！");
@@ -66,8 +64,25 @@ public class GoodsClassifyService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse listAllGoodsClassify() {
-        List<GoodsClassifyInfo> goodsClassifyInfo = goodsClassifyDao.listAllGoodsClassify();
-        return AppResponse.success("查询成功！",goodsClassifyInfo);
+        List<GoodsClassifyVO> listGoodsCategory = goodsClassifyDao.getListFirstAndSecondGoodsCategory();
+        List<GoodsClassifyVO> goodsCategoryList = new ArrayList<>();
+        //把二级分类拼接到一级分类上
+        for (int i = 0; i < listGoodsCategory.size(); i++) {
+            List<GoodsClassifyVO> secondCategoryList = new ArrayList<>();
+            for (int j = 0; j < listGoodsCategory.size(); j++){
+                if(listGoodsCategory.get(i).getClassifyId().equals(listGoodsCategory.get(j).getClassifyParent())){
+                    secondCategoryList.add(listGoodsCategory.get(j));
+                }
+            }
+            listGoodsCategory.get(i).setTwoClassifyList(secondCategoryList);
+            //父级id为0就添加到集合里
+            if("0".equals(listGoodsCategory.get(i).getClassifyParent())){
+                goodsCategoryList.add(listGoodsCategory.get(i));
+            }
+        }
+        GoodsClassifyList categoryList = new GoodsClassifyList();
+        categoryList.setOneClassifyList(goodsCategoryList);
+        return AppResponse.success("查询商品分类列表成功！", categoryList);
     }
 
     /**

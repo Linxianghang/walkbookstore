@@ -6,6 +6,7 @@ import com.neusoft.core.restful.AppResponse;
 import com.neusoft.util.StringUtil;
 import com.xzsd.pc.user.dao.UserDao;
 import com.xzsd.pc.user.entity.UserInfo;
+import com.xzsd.pc.user.entity.UserVO;
 import com.xzsd.pc.util.PasswordUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +41,10 @@ public class UserService {
         if(0 != countUserAcct) {
             return AppResponse.bizError("用户账号已存在，请重新输入！");
         }
+        int countUserPhone = userDao.countUserPhone(userInfo);
+        if(0 != countUserPhone) {
+            return AppResponse.bizError("手机已存在，请重新输入！");
+        }
         userInfo.setUserId(StringUtil.getCommonCode(2));
         userInfo.setIsDelete(0);
         //密码加密
@@ -63,7 +68,10 @@ public class UserService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse getUser(String userId) {
-        UserInfo userInfo = userDao.getUser(userId);
+        UserVO userInfo = userDao.getUser(userId);
+        if(userInfo == null){
+            return AppResponse.versionError("查询失败");
+        }
         return AppResponse.success("查询成功！",userInfo);
     }
 
@@ -76,14 +84,19 @@ public class UserService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse updateUser(UserInfo userInfo) {
+        UserVO user = userDao.getUser(userInfo.getUserId());
         AppResponse appResponse = AppResponse.success("修改成功");
-        // 校验账号是否存在
+        // 校验账号是否存在、存在才可以修改
         int countUserAcct = userDao.countUserAcct(userInfo);
-        if(countUserAcct > 1 || countUserAcct == 0) {
-            return AppResponse.bizError("用户账号已存在，请重新输入！");
+        if(0 == countUserAcct) {
+            return AppResponse.bizError("用户账号不存在，无法修改，请重新输入！");
         }
-        // 修改用户信息
-        userInfo.setUpdateUser("1");
+        //判断是否密码被修改、若修改进行新密码加密
+        if(!(user.getUserPassword().equals(userInfo.getUserPassword()))){
+            String password = userInfo.getUserPassword();
+            String pwd = PasswordUtil.generatePassword(password);
+            userInfo.setUserPassword(pwd);
+        }
         int count = userDao.updateUser(userInfo);
         if (0 == count) {
             appResponse = AppResponse.versionError("修改失败");
@@ -93,11 +106,11 @@ public class UserService {
     }
 
     /**
-     * demo 删除司机
+     * demo 删除用户
      * @param userId
-     * @param userCode
+     * @param updateUser
      * @return
-     * @Author dingning
+     * @Author linxianghang
      * @Date 2020-03-21
      */
     @Transactional(rollbackFor = Exception.class)

@@ -2,6 +2,7 @@ package com.xzsd.pc.driver.dao;
 
 
 import com.xzsd.pc.driver.entity.DriverInfo;
+import com.xzsd.pc.driver.entity.DriverVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -58,12 +59,20 @@ public interface DriverDao {
      */
     int updateDriverToUser(DriverInfo driverInfo);
 
+
     /**
-     * 查询司机列表
+     *管理员查询所有的司机信息
      * @param driverInfo
-     * @return List<DriverInfo>
+     * @return 司机信息
      */
-    List<DriverInfo>listDrivers(DriverInfo driverInfo);
+    List<DriverVO> getListDriverByAdmin(DriverInfo driverInfo);
+
+    /**
+     * 查询当前店长下的所有司机
+     * @param driverInfo
+     * @return
+     */
+    List<DriverVO> getListDriverByStore(DriverInfo driverInfo);
 
     /**
      * 删除司机列表

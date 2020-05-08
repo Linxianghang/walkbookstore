@@ -14,13 +14,6 @@ import java.util.List;
 @Mapper
 public interface ShoppingCartDao {
     /**
-     * 检查商品加入购物车时库存数量
-     * @param shoppingCartInfo
-     * @return
-     */
-    int countGoodsCount(ShoppingCartInfo shoppingCartInfo);
-
-    /**
      * 新增购物车
      * @param shoppingCartInfo
      * @return

@@ -21,11 +21,11 @@ public interface SlideShowDao {
     int addSlideshowHome(SlideShowInfo slideShowInfo);
 
     /**
-     *修改首页轮播图状态
-     * @param slideShowInfo
+     * 修改轮播图状态
+     * @param slideInfoList
      * @return
      */
-    int updateSlideshowHomeState(SlideShowInfo slideShowInfo);
+    int updateSlideshowHomeState(@Param("slideInfoList") List<SlideShowInfo> slideInfoList);
 
     /**
      * 删除首页轮播图
@@ -47,6 +47,8 @@ public interface SlideShowDao {
      * @return
      */
     List<SlideShowInfo> listSlideshowHomeByPage(SlideShowInfo slideShowInfo);
+
+
 
 
 }

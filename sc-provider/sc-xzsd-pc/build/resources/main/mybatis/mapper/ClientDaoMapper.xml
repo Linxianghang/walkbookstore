@@ -2,27 +2,55 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.xzsd.pc.client.dao.ClientDao">
 
-    <!--查询客户列表（分页）-->
-    <select id="listClientsByPage" parameterType="com.xzsd.pc.client.entity.ClientInfo" resultType="com.xzsd.pc.client.entity.ClientInfo">
+    <!--店长查询自己客户列表-->
+    <select id="getListCustomers" parameterType="com.xzsd.pc.client.entity.ClientInfo"
+            resultType="com.xzsd.pc.client.entity.ClientInfo">
         select
-        u.user_acct userAcct,
-        u.user_name userName,
-        u.sex sex,
-        u.phone phone,
-        u.mail mail,
-        u.idcard idCard
-        from t_info_client c
-        left join t_sys_user u on c.user_id = u.user_id and u.is_delete = 0
-        where c.is_delete = 0
+        t1.user_acct as userAcct,
+        t1.user_name as userName,
+        t1.sex as sex,
+        t1.phone as phone,
+        t1.mail as mail,
+        t1.user_id as userId,
+        t1.idcard as idCard
+        from t_sys_user t1, t_sys_customer t2, t_info_store t3
+        where t1.user_id = t2.user_id
+        and t2.invitation_code = t3.invite_code
+        and t1.role_id = 4
+        and t3.user_id = #{userId}
+        and t1.is_delete = 0
+        and t2.is_delete = 0
+        and t3.is_delete = 0
         <if test="userName != null and userName != ''">
-            and u.user_name like concat('%', #{userName}, '%')
+            and t1.user_name like concat('%', #{userName}, '%')
         </if>
         <if test="userAcct != null and userAcct != ''">
-            and u.user_acct like concat('%', #{userAcct}, '%')
+            and t1.user_acct like concat('%', #{userAcct}, '%')
         </if>
-        <if test="role != null and role != ''">
-            and u.role_id like concat('%', #{role}, '%')
+        order by t2.create_time desc
+    </select>
+
+    <!--查询登录者为管理员时的用户列表-->
+    <select id="getListCustomersByAdmin" parameterType="com.xzsd.pc.client.entity.ClientInfo"
+            resultType="com.xzsd.pc.client.entity.ClientInfo">
+        select
+        user_acct as userAcct,
+        user_name as userName,
+        sex as sex,
+        phone as phone,
+        mail as mail,
+        user_id as userId,
+        idcard as idCard
+        from t_sys_user
+        where role_id = 4
+        and is_delete = 0
+        <if test="userName != null and userName != ''">
+            and user_name like concat('%', #{userName}, '%')
         </if>
+        <if test="userAcct != null and userAcct != ''">
+            and user_acct like concat('%', #{userAcct}, '%')
+        </if>
+        order by create_time desc
     </select>
 
 </mapper>

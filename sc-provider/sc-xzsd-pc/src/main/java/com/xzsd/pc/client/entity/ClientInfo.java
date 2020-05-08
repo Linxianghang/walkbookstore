@@ -28,7 +28,7 @@ public class ClientInfo {
     /**
      * 手机号码
      */
-    private String phone;
+    private long phone;
     /**
      *  邮箱
      */
@@ -106,11 +106,11 @@ public class ClientInfo {
         this.sex = sex;
     }
 
-    public String getPhone() {
+    public long getPhone() {
         return phone;
     }
 
-    public void setPhone(String phone) {
+    public void setPhone(long phone) {
         this.phone = phone;
     }
 

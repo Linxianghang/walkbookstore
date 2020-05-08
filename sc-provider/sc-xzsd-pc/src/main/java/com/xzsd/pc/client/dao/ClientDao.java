@@ -15,10 +15,17 @@ import java.util.List;
 @Mapper
 public interface ClientDao {
     /**
-     * 分页查询接口
+     * 查询当前登录用户是店长时的所有客户信息
      * @param clientInfo
      * @return
      */
-    List<ClientInfo> listClientsByPage(ClientInfo clientInfo);
+    List<ClientInfo> getListCustomers(ClientInfo clientInfo);
+
+    /**
+     * 查询登录者为管理员时的用户列表
+     * @param clientInfo
+     * @return
+     */
+    List<ClientInfo> getListCustomersByAdmin(ClientInfo clientInfo);
 
 }

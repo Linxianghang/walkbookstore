@@ -64,7 +64,7 @@ public class UserInfo {
     /**
      * 手机号
      */
-    private String phone;
+    private long phone;
     /**
      * 用户邮箱
      */
@@ -190,11 +190,11 @@ public class UserInfo {
         this.sex = sex;
     }
 
-    public String getPhone() {
+    public long getPhone() {
         return phone;
     }
 
-    public void setPhone(String phone) {
+    public void setPhone(long phone) {
         this.phone = phone;
     }
 

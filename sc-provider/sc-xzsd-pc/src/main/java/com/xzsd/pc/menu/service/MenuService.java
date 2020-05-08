@@ -64,13 +64,6 @@ public class MenuService {
     @Transactional(rollbackFor = Exception.class)
     public AppResponse updateMenu(MenuInfo menuInfo) {
         AppResponse appResponse = AppResponse.success("修改成功");
-        // 校验菜单是否存在
-        /*int countUserAcct = userDao.countUserAcct(userInfo);
-        if(countUserAcct > 1 || countUserAcct == 0) {
-            return AppResponse.bizError("用户账号已存在，请重新输入！");
-        }*/
-        // 修改用户信息
-        menuInfo.setUpdateUser("1");
         int count = menuDao.updateMenu(menuInfo);
         if (0 == count) {
             appResponse = AppResponse.versionError("修改失败");

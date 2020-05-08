@@ -54,9 +54,9 @@
         t2.goods_price goodsPrice,
         t2.goods_describe goodsDescribe,
         t1.version version
-        from t_info_hot_goods t1, t_info_goods t2
-        where t1.goods_id = t2.goods_id
-        and t1.is_delete = 0
+        from t_info_hot_goods t1
+        left join t_info_goods t2 on t1.goods_id = t2.goods_id and t2.is_delete = 0
+        where t1.is_delete = 0
         <if test="goodsId != null and goodsId != ''">
             and t1.goods_id like concat('%', #{goodsId}, '%')
         </if>

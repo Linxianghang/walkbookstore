@@ -1,22 +1,6 @@
 package com.xzsd.pc.driver.entity;
 
-import java.util.Date;
-
-/**
- * @Description 司机实体类
- * @Author linxianghang
- * @Date 2020-03-26
- */
-
-public class DriverInfo {
-    /**
-     * 页码
-     */
-private int pageSize;
-    /**
-     * 页数
-     */
-    private int pageNum;
+public class DriverVO {
     /**
      * 司机编码
      */
@@ -38,17 +22,13 @@ private int pageSize;
      */
     private long phone;
     /**
-     *图片上传返回的路径
+     * 身份证
      */
-    private String imagePath;
+    private String idCard;
     /**
      * 显示的头像
      */
     private String userImage;
-    /**
-     * 身份证
-     */
-    private String idCard;
     /**
      * 省级编号
      */
@@ -62,25 +42,17 @@ private int pageSize;
      */
     private String areaId;
     /**
-     * 作废标记 0为存在，1为作废
+     * 省名
      */
-    private int isDelete;
+    private String provinceName;
     /**
-     * 创建者
+     * 城市名
      */
-    private String createUser;
+    private String cityName;
     /**
-     * 创建时间
+     * 区县名
      */
-    private Date createTime;
-    /**
-     * 更新者
-     */
-    private String updateUser;
-    /**
-     * 更新时间
-     */
-    private Date updateTime;
+    private String areaName;
     /**
      * 版本号
      */
@@ -90,33 +62,9 @@ private int pageSize;
      */
     private String driverInfoId;
     /**
-     * 登录角色
-     */
-    private String role;
-    /**
-     * 登录用户id
-     */
-    private String loginUserId;
-    /**
      * 登录用户的角色
      */
-    private String nowRole;
-
-    public int getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
-    }
-
-    public int getPageNum() {
-        return pageNum;
-    }
-
-    public void setPageNum(int pageNum) {
-        this.pageNum = pageNum;
-    }
+    private String newRole;
 
     public String getDriverId() {
         return driverId;
@@ -158,12 +106,12 @@ private int pageSize;
         this.phone = phone;
     }
 
-    public String getImagePath() {
-        return imagePath;
+    public String getIdCard() {
+        return idCard;
     }
 
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
     }
 
     public String getUserImage() {
@@ -172,14 +120,6 @@ private int pageSize;
 
     public void setUserImage(String userImage) {
         this.userImage = userImage;
-    }
-
-    public String getIdCard() {
-        return idCard;
-    }
-
-    public void setIdCard(String idCard) {
-        this.idCard = idCard;
     }
 
     public String getProvinceId() {
@@ -206,44 +146,28 @@ private int pageSize;
         this.areaId = areaId;
     }
 
-    public int getIsDelete() {
-        return isDelete;
+    public String getProvinceName() {
+        return provinceName;
     }
 
-    public void setIsDelete(int isDelete) {
-        this.isDelete = isDelete;
+    public void setProvinceName(String provinceName) {
+        this.provinceName = provinceName;
     }
 
-    public String getCreateUser() {
-        return createUser;
+    public String getCityName() {
+        return cityName;
     }
 
-    public void setCreateUser(String createUser) {
-        this.createUser = createUser;
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public String getAreaName() {
+        return areaName;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getUpdateUser() {
-        return updateUser;
-    }
-
-    public void setUpdateUser(String updateUser) {
-        this.updateUser = updateUser;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
+    public void setAreaName(String areaName) {
+        this.areaName = areaName;
     }
 
     public String getVersion() {
@@ -262,28 +186,11 @@ private int pageSize;
         this.driverInfoId = driverInfoId;
     }
 
-    public String getRole() {
-        return role;
+    public String getNewRole() {
+        return newRole;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setNewRole(String newRole) {
+        this.newRole = newRole;
     }
-
-    public String getLoginUserId() {
-        return loginUserId;
-    }
-
-    public void setLoginUserId(String loginUserId) {
-        this.loginUserId = loginUserId;
-    }
-
-    public String getNowRole() {
-        return nowRole;
-    }
-
-    public void setNowRole(String nowRole) {
-        this.nowRole = nowRole;
-    }
-
 }

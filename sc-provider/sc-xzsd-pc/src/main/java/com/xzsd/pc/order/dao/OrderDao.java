@@ -32,9 +32,16 @@ public interface OrderDao {
     int updateOrderState(OrderInfo orderInfo);
 
     /**
-     * 分页查询订单
+     * 查询订单列表（分页）
      * @param orderInfo
      * @return
      */
-    List<OrderSearchVO> listOrdersByPage(OrderInfo orderInfo);
+    List<OrderVO> listOrders(OrderInfo orderInfo);
+
+    /**
+     * 管理员查询全部订单（分页）
+     * @param orderInfo
+     * @return
+     */
+    List<OrderVO> getListOrderByAdmin(OrderInfo orderInfo);
 }

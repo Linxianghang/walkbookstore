@@ -29,7 +29,7 @@ public class StoreVO {
     /**
      * 电话
      */
-    private String phone;
+    private long phone;
     /**
      * 邀请码
      */
@@ -38,6 +38,18 @@ public class StoreVO {
      * 门店账号
      */
     private String userAcct;
+    /**
+     * 省Id
+     */
+    private String provinceId;
+    /**
+     * 城市Id
+     */
+    private String cityId;
+    /**
+     * 区Id
+     */
+    private String areaId;
     /**
      * 省名
      */
@@ -99,11 +111,11 @@ public class StoreVO {
         this.userName = userName;
     }
 
-    public String getPhone() {
+    public long getPhone() {
         return phone;
     }
 
-    public void setPhone(String phone) {
+    public void setPhone(long phone) {
         this.phone = phone;
     }
 
@@ -161,5 +173,29 @@ public class StoreVO {
 
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    public String getProvinceId() {
+        return provinceId;
+    }
+
+    public void setProvinceId(String provinceId) {
+        this.provinceId = provinceId;
+    }
+
+    public String getCityId() {
+        return cityId;
+    }
+
+    public void setCityId(String cityId) {
+        this.cityId = cityId;
+    }
+
+    public String getAreaId() {
+        return areaId;
+    }
+
+    public void setAreaId(String areaId) {
+        this.areaId = areaId;
     }
 }

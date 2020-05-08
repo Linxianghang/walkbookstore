@@ -39,7 +39,7 @@ public class StoreInfo {
     /**
      * 电话
      */
-    private String phone;
+    private long phone;
     /**
      * 邀请码
      */
@@ -149,11 +149,11 @@ public class StoreInfo {
         this.userName = userName;
     }
 
-    public String getPhone() {
+    public long getPhone() {
         return phone;
     }
 
-    public void setPhone(String phone) {
+    public void setPhone(long phone) {
         this.phone = phone;
     }
 

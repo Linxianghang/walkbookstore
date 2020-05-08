@@ -23,22 +23,22 @@
         and t2.order_id = t3.order_id
         and t3.goods_id = t4.goods_id
         and t1.invite_code = t5.invitation_code
-        and t5.customer_id = t6.user_id
+        and t5.user_id = t6.user_id
         and t2.user_id = t6.user_id
         and t2.is_delete = 0
         and t3.is_delete = 0
         <if test="orderStateId == 0">
-            and t2.order_status_id = '0'
+            and t2.order_state_id = '0'
         </if>
         <if test="orderStateId == 2">
-            and t2.order_status_id = '2'
+            and t2.order_state_id = '2'
         </if>
         <if test="orderStateId == 4">
-            and t2.order_status_id in(4,5)
+            and t2.order_state_id in(4,5)
         </if>
         <if test="keyword != null and keyword != ''">
             and (t4.goods_name like concat('%', #{keyword}, '%')
-            or t1.id like concat('%', #{keyword}, '%'))
+            or t1.store_id like concat('%', #{keyword}, '%'))
         </if>
         order by t2.create_time desc
     </select>

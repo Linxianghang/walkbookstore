@@ -22,21 +22,19 @@
             create_time,
             create_user,
             update_time,
-            update_user,
             version
             )
         values
            (
            #{driverId},
-           1,
-           #{driverProvince},
-           #{driverCity},
-           #{driverArea},
-           #{isDeleted},
+           0,
+           #{provinceId},
+           #{cityId},
+           #{areaId},
+           0,
            now(),
-           #{createBy},
+           #{createUser},
            now(),
-           #{lastModifiedBy},
            0
            )
     </insert>
@@ -50,27 +48,27 @@
             phone,
             idcard,
             role_id,
+            image_path,
             is_delete,
             create_time,
             create_user,
             update_time,
-            update_user,
             version
             )
         values
            (
            #{driverId},
-           #{driverAccount},
-           #{driverPassword},
-           #{driverName},
-           #{driverPhone},
-           #{driverIdCard},
+           #{userAcct},
+           #{userPassword},
+           #{userName},
+           #{phone},
+           #{idCard},
            3,
-            #{isDeleted},
+           #{imagePath},
+           0,
            now(),
-           #{createBy},
+           #{createUser},
            now(),
-           #{lastModifiedBy},
            0
            )
     </insert>
@@ -78,16 +76,24 @@
     <!--获取司机详情信息-->
     <select id="findDriverById" parameterType="java.lang.String" resultType="com.xzsd.pc.driver.entity.DriverInfo">
         select
-            u.user_name driverName,
-            u.phone driverPhone,
-            u.user_acct driverAccount,
-            u.user_password driverPassword,
-            u.idcard driverIdCard,
-            d.province_name driverProvince,
-            d.city_name driverCity,
-            d.area_name driverArea,
-            d.version
+            u.user_name userName,
+            u.phone phone,
+            u.user_acct userAcct,
+            u.user_password userPassword,
+            u.image_path userImage,
+            u.idcard idCard,
+            d.province_name provinceId,
+            d.city_name cityId,
+            d.area_name areaId,
+            t1.area_name provinceName,
+            t2.area_name cityName,
+            t3.area_name areaName,
+            d.version version,
+            d.driver_id driverId
         from t_info_driver d left join t_sys_user u on d.driver_id = u.user_id
+        left join t_info_area_level t1 on d.province_name = t1.area_id
+        left join t_info_area_level t2 on d.city_name = t2.area_id
+        left join t_info_area_level t3 on d.area_name = t3.area_id
         where u.user_id = #{driverId}
         and u.is_delete = 0
     </select>
@@ -96,11 +102,11 @@
     <update id="updateDriver" parameterType="com.xzsd.pc.driver.entity.DriverInfo">
         update t_info_driver
         set
-            province_name = #{driverProvince},
-            city_name = #{driverCity},
-            area_name = #{driverArea},
+            province_name = #{provinceId},
+            city_name = #{cityId},
+            area_name = #{areaId},
             update_time = now(),
-            update_user   = #{lastModifiedBy},
+            update_user   = #{updateUser},
             version      = version + 1
         where driver_id = #{driverId}
           and version = #{version}
@@ -109,36 +115,87 @@
     <update id="updateDriverToUser" parameterType="com.xzsd.pc.driver.entity.DriverInfo">
         update t_sys_user
         set
-            user_name = #{driverName},
-            phone = #{driverPhone},
-            user_acct = #{driverAccount},
-            user_password = #{driverPassword},
-            idcard = #{driverIdCard},
+            user_name = #{userName},
+            phone = #{phone},
+            user_acct = #{userAcct},
+            user_password = #{userPassword},
+            idcard = #{idCard},
             update_time = now(),
-            update_user   = #{lastModifiedBy},
+            update_user   = #{updateUser},
             version      = version + 1
         where user_id = #{driverId}
           and version = #{version}
     </update>
 
-    <!--司机列表-->
-    <select id="listDriversByPage" parameterType="com.xzsd.pc.driver.entity.DriverInfo" resultType="com.xzsd.pc.driver.entity.DriverInfo">
+    <!--管理员查询所有的司机信息-->
+    <select id="getListDriverByAdmin" parameterType="com.xzsd.pc.driver.entity.DriverInfo"
+            resultType="com.xzsd.pc.driver.entity.DriverVO">
         select
-            u.user_id driverId,
-            u.user_name driverName,
-            u.phone drivePhone,
-            u.idcard driveIdCard,
-            u.user_acct driveAccount,
-            u.version
-        from t_info_driver d left join t_sys_user u on d.driver_id = u.user_id
+        u.user_id as driverId,
+        u.user_name as userName,
+        u.phone as phone,
+        u.idcard as idCard,
+        u.user_acct userAcct,
+        u.version version
+        from t_sys_user u, t_info_driver d
         where u.is_delete = 0
+        and u.role_id = 3
+        and d.is_delete = 0
+        and u.user_id = d.driver_id
         <if test="driverId != null and driverId != ''">
             and u.user_id like concat('%', #{driverId}, '%')
         </if>
-        <if test="driverName != null and driverName != ''">
-            and u.user_name like concat('%', #{driverName}, '%')
+        <if test="userName != null and userName != ''">
+            and u.user_name like concat('%', #{userName}, '%')
+        </if>
+        <if test="provinceId != null and provinceId != ''">
+            and d.province_name = #{provinceId}
+        </if>
+        <if test="cityId != null and cityId != ''">
+            and d.city_name = #{cityId}
+        </if>
+        <if test="areaId != null and areaId != ''">
+            and d.area_name = #{areaId}
         </if>
         order by u.create_time desc
+    </select>
+
+    <!--查询当前店长下的所有司机-->
+    <select id="getListDriverByStore" parameterType="com.xzsd.pc.driver.entity.DriverInfo" resultType="com.xzsd.pc.driver.entity.DriverVO">
+        select
+        t1.user_id as driverId,
+        t1.user_name as userName,
+        t1.phone as phone,
+        t1.idcard as idCard,
+        t1.user_acct as userAcct,
+        t1.version as version
+        from t_sys_user t1, t_info_driver t2, t_info_store t3
+        where t1.is_delete = 0
+        and t1.role_id = 3
+        and t1.is_delete = 0
+        and t2.is_delete = 0
+        and t3.is_delete = 0
+        and t1.user_id= t2.driver_id
+        and t2.province_name = t3.province_id
+        and t2.city_name = t3.city_id
+        and t2.area_name = t3.area_id
+        and t3.user_id = #{loginUserId}
+        <if test="driverId != null and driverId != ''">
+            and t1.user_id like concat('%', #{driverId}, '%')
+        </if>
+        <if test="userName != null and userName != ''">
+            and t1.user_name like concat('%', #{userName}, '%')
+        </if>
+        <if test="provinceId != null and provinceId != ''">
+            and t2.province_name = #{provinceId}
+        </if>
+        <if test="cityId != null and cityId != ''">
+            and t2.city_name = #{cityId}
+        </if>
+        <if test="areaId != null and areaId != ''">
+            and t2.area_name = #{areaId}
+        </if>
+        order by t1.create_time desc
     </select>
 
 

@@ -11,6 +11,26 @@ import java.util.Date;
 
 public class GoodsInfo {
     /**
+     * 商品库存(对应商品编号，逗号隔开)
+     */
+    private String goodsInventories;
+    /**
+     *商品图片
+     */
+    private String goodsImagePath;
+    /**
+     * 商品上架时间
+     */
+    private String goodsShelfTime;
+    /**
+     * 商品浏览量
+     */
+    private int goodsViewsNum;
+    /**
+     *销售量
+     */
+    private int goodsSales;
+    /**
      * 页码
      */
     private int pageSize;
@@ -89,15 +109,15 @@ public class GoodsInfo {
     /**
      * 商品库存
      */
-    private String goodsInventory;
+    private int goodsInventory;
     /**
      * 成本价
      */
-    private String goodsOriginalCost;
+    private double goodsOriginalCost;
     /**
      * 在售价
      */
-    private String goodsPrice;
+    private double goodsPrice;
     /**
      * 广告词
      */
@@ -120,6 +140,7 @@ public class GoodsInfo {
      * 按钮名称[改成的状态编号]，
      */
     private  String goodsStateId;
+
 
     public int getPageSize() {
         return pageSize;
@@ -249,27 +270,27 @@ public class GoodsInfo {
         this.supplierName = supplierName;
     }
 
-    public String getGoodsInventory() {
+    public int getGoodsInventory() {
         return goodsInventory;
     }
 
-    public void setGoodsInventory(String goodsInventory) {
+    public void setGoodsInventory(int goodsInventory) {
         this.goodsInventory = goodsInventory;
     }
 
-    public String getGoodsOriginalCost() {
+    public double getGoodsOriginalCost() {
         return goodsOriginalCost;
     }
 
-    public void setGoodsOriginalCost(String goodsOriginalCost) {
+    public void setGoodsOriginalCost(double goodsOriginalCost) {
         this.goodsOriginalCost = goodsOriginalCost;
     }
 
-    public String getGoodsPrice() {
+    public double getGoodsPrice() {
         return goodsPrice;
     }
 
-    public void setGoodsPrice(String goodsPrice) {
+    public void setGoodsPrice(double goodsPrice) {
         this.goodsPrice = goodsPrice;
     }
 
@@ -335,5 +356,45 @@ public class GoodsInfo {
 
     public void setGoodsStateId(String goodsStateId) {
         this.goodsStateId = goodsStateId;
+    }
+
+    public int getGoodsSales() {
+        return goodsSales;
+    }
+
+    public void setGoodsSales(int goodsSales) {
+        this.goodsSales = goodsSales;
+    }
+
+    public String getGoodsShelfTime() {
+        return goodsShelfTime;
+    }
+
+    public void setGoodsShelfTime(String goodsShelfTime) {
+        this.goodsShelfTime = goodsShelfTime;
+    }
+
+    public int getGoodsViewsNum() {
+        return goodsViewsNum;
+    }
+
+    public void setGoodsViewsNum(int goodsViewsNum) {
+        this.goodsViewsNum = goodsViewsNum;
+    }
+
+    public String getGoodsImagePath() {
+        return goodsImagePath;
+    }
+
+    public void setGoodsImagePath(String goodsImagePath) {
+        this.goodsImagePath = goodsImagePath;
+    }
+
+    public String getGoodsInventories() {
+        return goodsInventories;
+    }
+
+    public void setGoodsInventories(String goodsInventories) {
+        this.goodsInventories = goodsInventories;
     }
 }

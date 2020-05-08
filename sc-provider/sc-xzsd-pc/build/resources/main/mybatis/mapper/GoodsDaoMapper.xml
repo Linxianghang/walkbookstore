@@ -20,6 +20,7 @@
          goods_image_path,
          goods_author,
          goods_press,
+         goods_shelf_time,
          is_delete,
          create_time,
          create_user,
@@ -42,6 +43,7 @@
         #{imagePath},
         #{goodsAuthor},
         #{goodsPress},
+        now(),
         0,
         now(),
         #{createUser},
@@ -55,8 +57,10 @@
     <select id="getGoods" parameterType="java.lang.String" resultType="com.xzsd.pc.goods.entity.GoodsInfo">
         select
          t.goods_name goodsName,
-         t.isbn,
+         t.isbn isbn,
+         t.one_classify_id oneClassifyId,
          c1.classify_name oneClassifyName,
+         t.two_classify_id twoClassifyId,
          c2.classify_name twoClassifyName,
          t.goods_describe goodsDescribe,
          t.supplier_name supplierName,
@@ -66,7 +70,9 @@
          t.goods_advertise goodsAdvertise,
          t.goods_image_path goodsImagePath,
          t.goods_author goodsAuthor,
-         t.goods_press goodsPress
+         t.goods_press goodsPress,
+         t.version version,
+         t.goods_id goodsId
          from t_info_goods t
          left join t_info_goods_classify c1 on t.one_classify_id = c1.classify_id
          left join t_info_goods_classify c2 on t.two_classify_id = c2.classify_id
@@ -128,7 +134,7 @@
     <select id="listGoodsByPage" parameterType="com.xzsd.pc.goods.entity.GoodsInfo" resultType="com.xzsd.pc.goods.entity.GoodsInfo">
         select
         t.goods_name goodsName,
-        t.isbn,
+        t.isbn isbn,
         c1.classify_name oneClassifyName,
         c2.classify_name twoClassifyName,
         t.goods_describe goodsDescribe,
@@ -138,8 +144,14 @@
         t.goods_price goodsPrice,
         t.goods_advertise goodsAdvertise,
         t.goods_image_path goodsImagePath,
-        t.goods_author goodsAuthor,
-        t.goods_press goodsPress
+        t.goods_press goodsPress,
+        t.goods_id goodsId,
+        t.version version,
+        t.goods_views_num goodsViewsNum,
+        t.goods_shelf_time goodsShelfTime,
+        t.goods_state_id goodsStateId,
+        t.goods_sales goodsSales,
+        t.goods_author goodsAuthor
         from t_info_goods t
         left join t_info_goods_classify c1 on t.one_classify_id = c1.classify_id
         left join t_info_goods_classify c2 on t.two_classify_id = c2.classify_id

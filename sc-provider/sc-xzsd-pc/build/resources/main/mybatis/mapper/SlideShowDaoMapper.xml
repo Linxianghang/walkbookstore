@@ -12,6 +12,7 @@
         start_time,
         end_time,
         goods_id,
+        slideshow_state_id,
         is_delete,
         create_time,
         create_user,
@@ -27,6 +28,7 @@
         #{startTime},
         #{endTime},
         #{goodsId},
+        1,
         #{isDelete},
         now(),
         #{createUser},
@@ -36,20 +38,24 @@
         )
       </insert>
 
-    <!--修改首页轮播图状态-->
-     <update id="updateSlideshowHomeState" parameterType="com.xzsd.pc.slideshow.entity.SlideShowInfo">
-        update t_info_slideshow_home
-        set
-        slideshow_state_id = #{slideshowStateId},
-        update_time = now(),
-        update_user   = #{updateUser},
-        version = version + 1
-        where slideshow_id = #{slideshowId}
-        and version = #{version}
-     </update>
+    <!--修改轮播图状态-->
+    <update id="updateSlideshowHomeState" parameterType="com.xzsd.pc.slideshow.entity.SlideShowInfo">
+        <foreach item="item" index="index" collection="slideInfoList" open="" separator=";" close="">
+            update t_info_slideshow_home
+            set
+            slideshow_state_id = #{item.slideshowStateId},
+            update_time = now(),
+            update_user = #{item.updateUser, jdbcType=VARCHAR},
+            version = version + 1
+            <where>
+                slideshow_id = #{item.slideshowId, jdbcType=VARCHAR}
+                and version = #{item.version, jdbcType=VARCHAR}
+            </where>
+        </foreach>
+    </update>
 
     <!--删除首页轮播图-->
-    <update id="deleteSlideshowHome" parameterType="com.xzsd.pc.driver.entity.DriverInfo">
+    <update id="deleteSlideshowHome" parameterType="com.xzsd.pc.slideshow.entity.SlideShowInfo">
         update t_info_slideshow_home
         set
         is_delete = 1,
@@ -70,11 +76,10 @@
         g.goods_state_id goodsStateId,
         c1.classify_name oneClassifyName,
         c2.classify_name twoClassifyName
-        from t_info_slideshow_home s
-        left join t_info_goods g on s.goods_id = g.goods_id
+        from  t_info_goods g
         left join t_info_goods_classify c1 on g.one_classify_id = c1.classify_id and c1.is_delete = 0
         left join t_info_goods_classify c2 on g.two_classify_id = c2.classify_id and c2.is_delete = 0
-        where s.is_delete = 0
+        where g.is_delete = 0
         <if test="goodsName != null and goodsName != ''">
             and goods_name like concat('%', #{goodsName}, '%')
         </if>
@@ -92,12 +97,13 @@
         start_time startTime,
         end_time endTime,
         slideshow_id slideshowId,
-        version
+        version version
         from t_info_slideshow_home
         where is_delete = 0
         <if test="slideshowStateId != null and slideshowStateId != ''">
             and slideshow_state_id like concat('%', #{slideshowStateId}, '%')
         </if>
+        order by slideshow_num asc
     </select>
 
 

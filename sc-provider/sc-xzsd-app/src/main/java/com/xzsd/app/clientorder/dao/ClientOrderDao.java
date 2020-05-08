@@ -109,4 +109,5 @@ public interface ClientOrderDao {
      * @return
      */
     int updateGoodsRank(@Param("listGoods") List<GoodsInfo> listGoods);
+
 }

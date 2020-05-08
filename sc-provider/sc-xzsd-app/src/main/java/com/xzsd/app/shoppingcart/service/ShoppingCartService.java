@@ -33,14 +33,8 @@ public class ShoppingCartService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse addShoppingCart(ShoppingCartInfo shoppingCartInfo){
-        // 新增购物车时检查要添加的商品是否存库足够
-        int goodsCount = shoppingCartDao.countGoodsCount(shoppingCartInfo);
-        int goodsNeedCount = shoppingCartInfo.getCartGoodsCount();
-        if(goodsNeedCount > goodsCount){
-            return AppResponse.versionError("要添加的商品库存不足，请重试！");
-        }
         shoppingCartInfo.setShopCartId(StringUtil.getCommonCode(3));
-        // 新增用户
+        // 新增购物车
         int count = shoppingCartDao.addShoppingCart(shoppingCartInfo);
         if(0 == count) {
             return AppResponse.bizError("新增失败，请重试！");

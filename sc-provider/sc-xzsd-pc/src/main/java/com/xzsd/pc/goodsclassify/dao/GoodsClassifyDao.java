@@ -1,6 +1,7 @@
 package com.xzsd.pc.goodsclassify.dao;
 
 import com.xzsd.pc.goodsclassify.entity.GoodsClassifyInfo;
+import com.xzsd.pc.goodsclassify.entity.GoodsClassifyVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -47,4 +48,10 @@ public interface GoodsClassifyDao {
      * @return
      */
     int deleteGoodsClassify(@Param("listcode") List<String> listcode, @Param("userId") String userId);
+
+    /**
+     * 查询商品一二级分类列表信息
+     * @return
+     */
+    List<GoodsClassifyVO> getListFirstAndSecondGoodsCategory();
 }

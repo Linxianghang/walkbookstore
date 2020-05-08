@@ -7,7 +7,15 @@
         select count(user_acct)
         from t_sys_user
         where is_delete = 0
-        and user_id = #{userId}
+        and user_acct = #{userAcct}
+    </select>
+
+    <!--统计用户账号或手机号-->
+    <select id="countUserPhone" parameterType="com.xzsd.pc.user.entity.UserInfo" resultType="int">
+        select count(phone)
+        from t_sys_user
+        where is_delete = 0
+        and phone = #{phone}
     </select>
 
     <!--新增用户-->
@@ -52,18 +60,19 @@
       </insert>
 
     <!--查询用户详情-->
-    <select id="getUser" parameterType="java.lang.String" resultType="com.xzsd.pc.user.entity.UserInfo">
+    <select id="getUser" parameterType="java.lang.String" resultType="com.xzsd.pc.user.entity.UserVO">
         select
+        user_id userId,
         user_acct userAcct,
         user_name userName,
         image_path userImage,
-        sex,
-        phone,
-        mail,
+        sex sex,
+        phone phone,
+        mail mail,
         idcard idCard,
         user_password userPassword,
         role_id role,
-        version
+        version version
         from t_sys_user
         where user_id = #{userId}
         and is_delete = 0
@@ -103,7 +112,7 @@
         </foreach>
     </update>
 
-    <!--查询司机列表（分页）-->
+    <!--查询用户列表（分页）-->
     <select id="listUsersByPage" parameterType="com.xzsd.pc.user.entity.UserInfo" resultType="com.xzsd.pc.user.entity.UserInfo">
         select
         user_acct userAcct,
@@ -117,6 +126,7 @@
         version
         from t_sys_user
         where is_delete = 0
+        and role_id in (1, 2)
         <if test="userName != null and userName != ''">
             and user_name like concat('%', #{userName}, '%')
         </if>

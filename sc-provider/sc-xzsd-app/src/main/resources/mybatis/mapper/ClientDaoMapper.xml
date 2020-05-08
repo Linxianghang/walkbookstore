@@ -19,7 +19,7 @@
             update_time = now(),
             update_user = #{userId},
             version = version + 1
-        where customer_id = #{userId}
+        where user_id = #{userId}
         and is_delete = 0
     </update>
 </mapper>

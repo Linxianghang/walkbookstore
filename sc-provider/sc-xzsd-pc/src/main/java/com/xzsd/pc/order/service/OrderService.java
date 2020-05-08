@@ -73,10 +73,14 @@ public class OrderService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse listOrders(OrderInfo orderInfo) {
+        List<OrderVO> listOrder = null;
         PageHelper.startPage(orderInfo.getPageNum(), orderInfo.getPageSize());
-        List<OrderSearchVO> orderSearchVOList = orderDao.listOrdersByPage(orderInfo);
-        // 包装Page对象
-        PageInfo<OrderSearchVO> pageData = new PageInfo<OrderSearchVO>(orderSearchVOList);
-        return AppResponse.success("查询成功！",pageData);
+        if("2".equals(orderInfo.getRole())){
+            listOrder = orderDao.listOrders(orderInfo);
+        }else if("0".equals(orderInfo.getRole()) || "1".equals(orderInfo.getRole())){
+            listOrder = orderDao.getListOrderByAdmin(orderInfo);
+        }
+        PageInfo<OrderVO> pageData = new PageInfo<>(listOrder);
+        return AppResponse.success("查询订单列表成功！", pageData);
     }
 }

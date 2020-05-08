@@ -2,6 +2,7 @@ package com.xzsd.pc.slideshow.controller;
 
 
 import com.neusoft.core.restful.AppResponse;
+import com.neusoft.security.client.utils.SecurityUtils;
 import com.neusoft.util.AuthUtils;
 import com.xzsd.pc.slideshow.entity.SlideShowInfo;
 import com.xzsd.pc.slideshow.service.SlideShowService;
@@ -57,7 +58,7 @@ public class SlideShowController {
     public AppResponse updateSlideshowHomeState(SlideShowInfo slideShowInfo) {
         try {
             //获取用户id
-            String userId = AuthUtils.getCurrentUserId();
+            String userId = SecurityUtils.getCurrentUserId();
             slideShowInfo.setUpdateUser(userId);
             return slideShowService.updateSlideshowHomeState(slideShowInfo);
         } catch (Exception e) {

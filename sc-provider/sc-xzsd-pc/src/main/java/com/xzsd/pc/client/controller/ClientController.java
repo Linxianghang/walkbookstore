@@ -2,6 +2,8 @@ package com.xzsd.pc.client.controller;
 
 
 import com.neusoft.core.restful.AppResponse;
+import com.neusoft.security.client.utils.SecurityUtils;
+import com.neusoft.util.AuthUtils;
 import com.xzsd.pc.client.entity.ClientInfo;
 import com.xzsd.pc.client.service.ClientService;
 import org.slf4j.Logger;
@@ -30,6 +32,9 @@ public class ClientController {
     @RequestMapping(value = "listClients")
     public AppResponse listUsers(ClientInfo clientInfo) {
         try {
+            //获取店长id
+            String userId = SecurityUtils.getCurrentUserId();
+            clientInfo.setUserId(userId);
             return clientService.listClients(clientInfo);
         } catch (Exception e) {
             logger.error("查询客户列表异常", e);

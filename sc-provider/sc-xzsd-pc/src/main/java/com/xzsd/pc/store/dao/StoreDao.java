@@ -44,9 +44,16 @@ public interface StoreDao {
     int deleteStore(@Param("listcode") List<String> listcode, @Param("userId") String userId);
 
     /**
-     * 分页查询接口
+     * 店长查询自己门店信息
      * @param storeInfo
      * @return
      */
-    List<StoreVO> listStoresByPage(StoreInfo storeInfo);
+    List<StoreVO> getListStore(StoreInfo storeInfo);
+
+    /**
+     * 管理员查询所有门店信息
+     * @param storeInfo
+     * @return
+     */
+    List<StoreVO> getListStoreByAdmin(StoreInfo storeInfo);
 }

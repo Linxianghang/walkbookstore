@@ -6,6 +6,7 @@ import com.neusoft.core.restful.AppResponse;
 import com.neusoft.util.StringUtil;
 import com.xzsd.pc.driver.dao.DriverDao;
 import com.xzsd.pc.driver.entity.DriverInfo;
+import com.xzsd.pc.driver.entity.DriverVO;
 import com.xzsd.pc.util.PasswordUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,11 +42,10 @@ public class DriverService {
             return AppResponse.bizError("用户账号已存在，请重新输入！");
         }
         driverInfo.setDriverId(StringUtil.getCommonCode(2));
-        driverInfo.setIsDeleted(0);
         //密码加密
-        String oldpwd = driverInfo.getDriverPassword();
+        String oldpwd = driverInfo.getUserPassword();
         String pwd = PasswordUtil.generatePassword(oldpwd);
-        driverInfo.setDriverPassword(pwd);
+        driverInfo.setUserPassword(pwd);
         // 新增用户
         int count = driverDao.addDriver(driverInfo);
         int usercount = driverDao.addDriverToUser(driverInfo);
@@ -83,8 +83,6 @@ public class DriverService {
         if(countDriverAcct > 1 || countDriverAcct == 0) {
             return AppResponse.bizError("用户账号已存在，请重新输入！");
         }
-        // 修改用户信息
-        driverInfo.setLastModifiedBy("1");
         int count = driverDao.updateDriver(driverInfo);
         int usercount = driverDao.updateDriverToUser(driverInfo);
         if (0 == count && 0 == usercount) {
@@ -104,10 +102,14 @@ public class DriverService {
     @Transactional(rollbackFor = Exception.class)
     public AppResponse listDrivers(DriverInfo driverInfo) {
         PageHelper.startPage(driverInfo.getPageNum(), driverInfo.getPageSize());
-        List<DriverInfo> driverInfoList = driverDao.listDriversByPage(driverInfo);
-        // 包装Page对象
-        PageInfo<DriverInfo> pageData = new PageInfo<DriverInfo>(driverInfoList);
-        return AppResponse.success("查询成功！",pageData);
+        List<DriverVO> listDriver = null;
+        if("2".equals(driverInfo.getRole())){
+            listDriver = driverDao.getListDriverByStore(driverInfo);
+        }else if("0".equals(driverInfo.getRole()) || "1".equals(driverInfo.getRole())){
+            listDriver = driverDao.getListDriverByAdmin(driverInfo);
+        }
+        PageInfo<DriverVO> pageData = new PageInfo<DriverVO>(listDriver);
+        return AppResponse.success("查询成功！", pageData);
     }
 
 

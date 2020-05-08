@@ -2,6 +2,7 @@ package com.xzsd.pc.order.controller;
 
 
 import com.neusoft.core.restful.AppResponse;
+import com.neusoft.security.client.utils.SecurityUtils;
 import com.neusoft.util.AuthUtils;
 import com.xzsd.pc.order.entity.OrderInfo;
 import com.xzsd.pc.order.service.OrderService;
@@ -80,6 +81,9 @@ public class OrderController {
     @RequestMapping(value = "listOrders")
     public AppResponse listOrders(OrderInfo orderInfo) {
         try {
+            //获取用户角色
+            String userId = SecurityUtils.getCurrentUserId();
+            orderInfo.setLoginUserId(userId);
             return orderService.listOrders(orderInfo);
         } catch (Exception e) {
             logger.error("查询订单列表异常", e);

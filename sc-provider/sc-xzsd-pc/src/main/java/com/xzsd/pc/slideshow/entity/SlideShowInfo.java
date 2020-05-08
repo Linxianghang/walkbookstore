@@ -10,6 +10,10 @@ import java.util.Date;
  */
 public class SlideShowInfo {
     /**
+     * 轮播图图片路径
+     */
+    private String slideshowPath;
+    /**
      * 一页多少张图片
      */
     private int pageSize;
@@ -236,5 +240,13 @@ public class SlideShowInfo {
 
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    public String getSlideshowPath() {
+        return slideshowPath;
+    }
+
+    public void setSlideshowPath(String slideshowPath) {
+        this.slideshowPath = slideshowPath;
     }
 }

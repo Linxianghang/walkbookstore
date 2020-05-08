@@ -19,6 +19,9 @@
         t_info_area_level t5, t_info_area_level t6
         where t1.driver_id = #{userId}
         and t2.user_id = t3.user_id
+        and t1.province_name = t2.province_id
+        and t1.city_name = t2.city_id
+        and t1.area_name = t2.area_id
         and t2.province_id = t4.area_id
         and t2.city_id = t5.area_id
         and t2.area_id = t6.area_id

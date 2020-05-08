@@ -7,6 +7,7 @@ import com.neusoft.core.restful.AppResponse;
 import com.neusoft.util.StringUtil;
 import com.xzsd.pc.goods.dao.GoodsDao;
 import com.xzsd.pc.goods.entity.GoodsClassifyInfo;
+import com.xzsd.pc.goods.entity.GoodsClassifyList;
 import com.xzsd.pc.goods.entity.GoodsInfo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -96,13 +97,6 @@ public class GoodsService {
     @Transactional(rollbackFor = Exception.class)
     public AppResponse updateGoodsShelfState(GoodsInfo goodsInfo) {
         AppResponse appResponse = AppResponse.success("修改成功");
-        // 校验商品是否存在
-        /*int countUserAcct = goodsDao.countUserAcct(userInfo);
-        if(countUserAcct > 1 || countUserAcct == 0) {
-            return AppResponse.bizError("用户账号已存在，请重新输入！");
-        }*/
-        // 修改用户信息
-        goodsInfo.setUpdateUser("1");
         int count = goodsDao.updateGoodsShelfState(goodsInfo);
         if (0 == count) {
             appResponse = AppResponse.versionError("修改失败");
@@ -112,11 +106,11 @@ public class GoodsService {
     }
 
     /**
-     * demo 删除司机
+     * demo 删除商品
      * @param goodsId
      * @param updateUser
      * @return
-     * @Author dingning
+     * @Author linxianghang
      * @Date 2020-03-21
      */
     @Transactional(rollbackFor = Exception.class)
@@ -157,6 +151,11 @@ public class GoodsService {
     @Transactional(rollbackFor = Exception.class)
     public AppResponse listGoodsClassify(String classifyId) {
         List<GoodsClassifyInfo> goodsClassifyList = goodsDao.listGoodsClassify(classifyId);
-        return AppResponse.success("查询成功！",goodsClassifyList);
+        if(goodsClassifyList.size() == 0){
+            return AppResponse.versionError("查询商品分类下拉框失败");
+        }
+        GoodsClassifyList goodsClassifyListReturn = new GoodsClassifyList();
+        goodsClassifyListReturn.setGoodsClassifyList(goodsClassifyList);
+        return AppResponse.success("查询成功！",goodsClassifyListReturn);
     }
 }

@@ -3,6 +3,7 @@ package com.xzsd.pc.store.service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.neusoft.core.restful.AppResponse;
+import com.neusoft.util.RandomUtil;
 import com.neusoft.util.StringUtil;
 import com.xzsd.pc.store.dao.StoreDao;
 import com.xzsd.pc.store.entity.StoreInfo;
@@ -33,11 +34,8 @@ public class StoreService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse addStore(StoreInfo storeInfo){
-        // 校验门店是否存在 待写！
-        /*int countUserAcct = slideShowDao.countUserAcct(userInfo);
-        if(0 != countUserAcct) {
-            return AppResponse.bizError("用户账号已存在，请重新输入！");
-        }*/
+        //设置一串随机邀请码
+        storeInfo.setInviteCode(RandomUtil.radmonkey(6));
         storeInfo.setStoreId(StringUtil.getCommonCode(2));
         storeInfo.setIsDelete(0);
         // 新增用户
@@ -70,11 +68,16 @@ public class StoreService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse listStoresByPage(StoreInfo storeInfo) {
+        List<StoreVO> listStore = null;
         PageHelper.startPage(storeInfo.getPageNum(), storeInfo.getPageSize());
-        List<StoreVO> storeVOList = storeDao.listStoresByPage(storeInfo);
-        // 包装Page对象
-        PageInfo<StoreVO> pageData = new PageInfo<StoreVO>(storeVOList);
-        return AppResponse.success("查询成功！",pageData);
+        //店长查询自己的门店，管理员查询所有门店
+        if("2".equals(storeInfo.getRole())){
+            listStore = storeDao.getListStore(storeInfo);
+        }else if("0".equals(storeInfo.getRole()) || "1".equals(storeInfo.getRole())){
+            listStore = storeDao.getListStoreByAdmin(storeInfo);
+        }
+        PageInfo<StoreVO> pageData = new PageInfo<>(listStore);
+        return AppResponse.success("查询门店信息列表成功！", pageData);
     }
 
     /**

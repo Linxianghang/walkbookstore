@@ -2,6 +2,7 @@ package com.xzsd.pc.user.dao;
 
 
 import com.xzsd.pc.user.entity.UserInfo;
+import com.xzsd.pc.user.entity.UserVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -15,6 +16,13 @@ public interface UserDao {
      * @return
      */
     int countUserAcct(UserInfo userInfo);
+
+    /**
+     * 统计用户账号或手机号
+     * @param userInfo
+     * @return
+     */
+    int countUserPhone(UserInfo userInfo);
 
 
     /**
@@ -36,7 +44,7 @@ public interface UserDao {
      * @param userId
      * @return UserInfo
      */
-    UserInfo getUser(@Param("userId") String userId);
+    UserVO getUser(@Param("userId") String userId);
 
 
     /**

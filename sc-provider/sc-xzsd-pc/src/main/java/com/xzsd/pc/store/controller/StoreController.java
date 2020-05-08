@@ -2,6 +2,7 @@ package com.xzsd.pc.store.controller;
 
 
 import com.neusoft.core.restful.AppResponse;
+import com.neusoft.security.client.utils.SecurityUtils;
 import com.neusoft.util.AuthUtils;
 import com.xzsd.pc.store.entity.StoreInfo;
 import com.xzsd.pc.store.service.StoreService;
@@ -100,6 +101,9 @@ public class StoreController {
     @RequestMapping(value = "listStores")
     public AppResponse listStores(StoreInfo storeInfo) {
         try {
+            //获取当前登录者的id
+            String loginUserId = SecurityUtils.getCurrentUserId();
+            storeInfo.setUserId(loginUserId);
             return storeService.listStoresByPage(storeInfo);
         } catch (Exception e) {
             logger.error("查询门店列表异常", e);

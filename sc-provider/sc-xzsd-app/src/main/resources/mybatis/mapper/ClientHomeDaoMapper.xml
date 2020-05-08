@@ -33,6 +33,8 @@
         t2.goods_price as goodsPrice
         from t_info_hot_goods t1, t_info_goods t2
         where t1.goods_id = t2.goods_id
+        and t1.is_delete = 0
+        and t2.is_delete = 0
         order by t1.hot_goods_num asc
         limit #{showNumber}
     </select>

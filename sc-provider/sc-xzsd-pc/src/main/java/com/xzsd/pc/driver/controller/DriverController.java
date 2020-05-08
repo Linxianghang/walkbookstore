@@ -2,6 +2,7 @@ package com.xzsd.pc.driver.controller;
 
 
 import com.neusoft.core.restful.AppResponse;
+import com.neusoft.security.client.utils.SecurityUtils;
 import com.neusoft.util.AuthUtils;
 import com.xzsd.pc.driver.entity.DriverInfo;
 import com.xzsd.pc.driver.service.DriverService;
@@ -38,8 +39,8 @@ public class DriverController {
     public AppResponse addDriver(DriverInfo driverInfo) {
         try {
             //获取用户id
-            String userId = AuthUtils.getCurrentUserId();
-            driverInfo.setCreateBy(userId);
+            String userId = SecurityUtils.getCurrentUserId();
+            driverInfo.setCreateUser(userId);
             AppResponse appResponse = driverService.addDriver(driverInfo);
             return appResponse;
         } catch (Exception e) {
@@ -57,7 +58,7 @@ public class DriverController {
      * @author linxianghang
      * @Date 2020-03-21
      */
-    @RequestMapping(value = "findDriverById")
+    @PostMapping("getDriver")
     public AppResponse findDriverById(String driverId) {
         try {
             return driverService.findDriverById(driverId);
@@ -80,9 +81,8 @@ public class DriverController {
     public AppResponse updateDriver(DriverInfo driverInfo) {
         try {
             //获取用户id
-            String userId = AuthUtils.getCurrentUserId();
-            driverInfo.setCreateBy(userId);
-            driverInfo.setLastModifiedBy(userId);
+            String userId = SecurityUtils.getCurrentUserId();
+            driverInfo.setUpdateUser(userId);
             return driverService.updateDriver(driverInfo);
         } catch (Exception e) {
             logger.error("修改司机信息错误", e);
@@ -102,6 +102,8 @@ public class DriverController {
     @RequestMapping(value = "listDrivers")
     public AppResponse listUsers(DriverInfo driverInfo) {
         try {
+            String userId = SecurityUtils.getCurrentUserId();
+            driverInfo.setLoginUserId(userId);
             return driverService.listDrivers(driverInfo);
         } catch (Exception e) {
             logger.error("查询司机列表异常", e);
@@ -122,7 +124,7 @@ public class DriverController {
     public AppResponse deleteDriver(String userCode) {
         try {
             //获取用户id
-            String userId = AuthUtils.getCurrentUserId();
+            String userId = SecurityUtils.getCurrentUserId();
             return driverService.deleteDriver(userCode, userId);
         } catch (Exception e) {
             logger.error("司机删除错误", e);

@@ -2,6 +2,7 @@ package com.xzsd.pc.menu.controller;
 
 
 import com.neusoft.core.restful.AppResponse;
+import com.neusoft.security.client.utils.SecurityUtils;
 import com.neusoft.util.AuthUtils;
 import com.xzsd.pc.menu.entity.MenuInfo;
 import com.xzsd.pc.menu.service.MenuService;
@@ -81,7 +82,7 @@ public class MenuController {
     public AppResponse updateMenu(MenuInfo menuInfo) {
         try {
             //获取用户id
-            String userId = AuthUtils.getCurrentUserId();
+            String userId = SecurityUtils.getCurrentUserId();
             menuInfo.setUpdateUser(userId);
             return menuService.updateMenu(menuInfo);
         } catch (Exception e) {

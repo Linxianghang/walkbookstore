@@ -2,6 +2,7 @@ package com.xzsd.pc.goods.controller;
 
 
 import com.neusoft.core.restful.AppResponse;
+import com.neusoft.security.client.utils.SecurityUtils;
 import com.neusoft.util.AuthUtils;
 import com.xzsd.pc.goods.entity.GoodsInfo;
 import com.xzsd.pc.goods.service.GoodsService;
@@ -75,7 +76,7 @@ public class GoodsController {
     public AppResponse updateGoods(GoodsInfo goodsInfo) {
         try {
             //获取用户id
-            String userId = AuthUtils.getCurrentUserId();
+            String userId = SecurityUtils.getCurrentUserId();
             goodsInfo.setUpdateUser(userId);
             return goodsService.updateGoods(goodsInfo);
         } catch (Exception e) {
@@ -97,7 +98,7 @@ public class GoodsController {
     public AppResponse updateGoodsShelfState(GoodsInfo goodsInfo) {
         try {
             //获取用户id
-            String userId = AuthUtils.getCurrentUserId();
+            String userId = SecurityUtils.getCurrentUserId();
             goodsInfo.setUpdateUser(userId);
             return goodsService.updateGoodsShelfState(goodsInfo);
         } catch (Exception e) {
